@@ -5,6 +5,13 @@ e [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [1.1.0] - 2026-09-30
+
+### Alterado
+- HSTS ativo (HTTPS confirmado).
+- Logs de acesso em `/var/log/nginx-rc2/` (retenção de ~13 meses para as
+  estatísticas de visitas, geradas pelo `rc2-sistemas-site`).
+
 ## [1.0.0] - 2026-09-29
 
 ### Adicionado

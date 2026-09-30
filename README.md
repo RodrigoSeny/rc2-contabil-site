@@ -53,4 +53,4 @@ bash /var/www/rc2-contabil-site/deploy/atualizar.sh
 - **MEI**: atualizar `MEI.salarioMinimo` todo janeiro.
 - **Reforma Tributária** (LC 214/2025): revisar antes de janeiro/2027.
 - **APIs de CNPJ**: se mudarem, ajustar `APIS` em `app.js` **e** o `connect-src` da CSP em `deploy/nginx-contabil.conf`.
-- **Visitas**: o Nginx grava `/var/log/nginx/rc2-contabil.access.log` com IP anonimizado.
+- **Visitas**: o Nginx grava `/var/log/nginx-rc2/contabil.access.log` com IP anonimizado.
