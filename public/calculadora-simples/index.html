@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora do Simples Nacional | RC2 Contábil</title>
+  <meta name="description" content="Simule gratuitamente o valor estimado do DAS do Simples Nacional. Consulte o CNPJ, veja a sugestão de anexo por CNAE, Fator R e a repartição dos tributos. Cálculo ilustrativo — RC2 Contábil.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#062F66">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Calculadora do Simples Nacional | RC2 Contábil">
+  <meta property="og:description" content="Simulação ilustrativa do DAS do Simples Nacional com consulta de CNPJ e Fator R.">
+  <meta property="og:image" content="assets/img/logo-rc2.png">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/tabelas.js" defer></script>
+  <script src="assets/js/calculo.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#calculadora">Ir para a calculadora</a>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="./" aria-label="RC2 Contábil — início">
+        <img src="assets/img/logo-rc2.png" alt="Logo RC2 Contábil" width="52" height="52">
+        <span class="brand__text">
+          <strong>RC2 Contábil</strong>
+          <small>Contabilidade para empresas</small>
+        </span>
+      </a>
+      <nav class="topbar__nav" aria-label="Navegação principal">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#avisos">Avisos legais</a>
+        <a class="btn btn--ghost-light" href="https://wa.me/5521973839229?text=Ol%C3%A1%2C%20vim%20pela%20calculadora%20do%20Simples%20Nacional%20e%20gostaria%20de%20falar%20com%20um%20contador." target="_blank" rel="noopener noreferrer">Fale com um contador</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero__inner">
+      <div>
+        <p class="eyebrow">Ferramenta gratuita</p>
+        <h1>Calculadora do Simples Nacional</h1>
+        <p class="hero__lead">Estime o valor do DAS do mês a partir do faturamento, com consulta de CNPJ, sugestão de anexo pela atividade (CNAE), Fator R e a repartição de cada tributo.</p>
+        <ul class="hero__badges">
+          <li>Tabelas da LC 123/2006</li>
+          <li>Sem cadastro</li>
+          <li>Nenhum dado armazenado</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="notice notice--warning" role="note">
+      <svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20.5h20L12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.2" fill="currentColor"/></svg>
+      <div>
+        <strong>Cálculo meramente ilustrativo.</strong>
+        Esta simulação usa as tabelas e regras gerais do Simples Nacional e depende dos dados que você informar. Não substitui a apuração oficial no PGDAS-D, não gera guia e não constitui orientação contábil ou jurídica. Situações específicas (substituição tributária, monofásicos, isenções, retenções, benefícios estaduais/municipais, sublimites e mudanças da Reforma Tributária) podem alterar o valor. Confirme sempre com um contador.
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="modos" role="tablist" aria-label="Tipo de simulação">
+      <button id="tab-simples" class="modos__tab" type="button" role="tab" aria-selected="true" aria-controls="calculadora">
+        <strong>Versão simples</strong>
+        <span>CNPJ, receita de 12 meses, faturamento e folha</span>
+      </button>
+      <button id="tab-completa" class="modos__tab" type="button" role="tab" aria-selected="false" aria-controls="calculadora">
+        <strong>Versão completa</strong>
+        <span>Várias atividades, ST, monofásico, ISS retido, início de atividade</span>
+      </button>
+    </div>
+  </div>
+
+  <main id="calculadora" class="container layout">
+    <div class="col-form">
+
+      <!-- ETAPA 1 -->
+      <section class="card" aria-labelledby="etapa1">
+        <header class="card__head">
+          <span class="step">1</span>
+          <div>
+            <h2 id="etapa1">Identifique a empresa <span class="muted" id="cnpj-obrigatorio">(obrigatório)</span></h2>
+            <p class="card__sub">Buscamos os dados públicos do CNPJ para sugerir o enquadramento.</p>
+          </div>
+        </header>
+
+        <form id="form-cnpj" class="cnpj-form" novalidate autocomplete="off">
+          <label for="cnpj" class="label">CNPJ</label>
+          <div class="input-row">
+            <input id="cnpj" name="cnpj" class="input input--lg" type="text" inputmode="numeric" maxlength="18" placeholder="00.000.000/0000-00" aria-describedby="cnpj-status cnpj-privacidade" spellcheck="false">
+            <button id="btn-cnpj" class="btn btn--primary" type="submit">
+              <span class="btn__label">Consultar</span>
+            </button>
+          </div>
+          <p id="cnpj-status" class="field-status" role="status" aria-live="polite"></p>
+          <p id="cnpj-privacidade" class="hint">
+            A consulta é feita diretamente do seu navegador em bases públicas da Receita Federal (BrasilAPI; em caso de falha, CNPJ.ws). Não gravamos o CNPJ nem os resultados.
+          </p>
+        </form>
+
+        <div id="empresa" class="empresa" hidden></div>
+      </section>
+
+      <!-- ETAPA 2 — versão simples -->
+      <section id="card-simples" class="card" aria-labelledby="etapa2s">
+        <header class="card__head">
+          <span class="step">2</span>
+          <div>
+            <h2 id="etapa2s">Informe os valores</h2>
+            <p class="card__sub">Valores em reais. Use vírgula para os centavos.</p>
+          </div>
+        </header>
+
+        <form id="form-simples" novalidate autocomplete="off">
+          <div id="simples-atividade" class="notice notice--info atividade-box" hidden></div>
+
+          <div class="grid-3">
+            <div class="field">
+              <label class="label" for="rbt12-s">Receita bruta dos últimos 12 meses (RBT12)</label>
+              <input id="rbt12-s" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <p class="hint">Soma do faturamento dos 12 meses anteriores ao mês calculado.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="fat-s">Faturamento do mês</label>
+              <input id="fat-s" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <p class="hint">Receita do mês que você quer calcular.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="folha-s">Folha de pagamento dos últimos 12 meses</label>
+              <input id="folha-s" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <p class="hint">Salários, pró-labore e encargos. Usada no Fator R.</p>
+            </div>
+          </div>
+
+          <div id="form-erros-s" class="notice notice--error" role="alert" hidden></div>
+
+          <div class="actions">
+            <button class="btn btn--primary btn--lg" type="submit">Calcular estimativa</button>
+            <button id="btn-limpar-s" class="btn btn--secondary" type="button">Limpar</button>
+          </div>
+          <p class="hint">Considera toda a receita na atividade principal do CNPJ, com tributação normal. Para separar atividades ou informar substituição tributária, monofásico, ISS retido e início de atividade, use a <button id="link-completa" class="btn btn--link btn--inline" type="button">versão completa</button>.</p>
+        </form>
+      </section>
+
+      <!-- ETAPA 2 — versão completa -->
+      <section id="card-completo" class="card" aria-labelledby="etapa2" hidden>
+        <header class="card__head">
+          <span class="step">2</span>
+          <div>
+            <h2 id="etapa2">Informe os dados para o cálculo</h2>
+            <p class="card__sub">Valores em reais. Use vírgula para os centavos.</p>
+          </div>
+        </header>
+
+        <form id="form-calc" novalidate autocomplete="off">
+          <div class="grid-2">
+            <div class="field">
+              <label class="label" for="periodo">Período de apuração</label>
+              <input id="periodo" class="input" type="month">
+            </div>
+            <fieldset class="field">
+              <legend class="label">Tempo de atividade</legend>
+              <div class="segmented">
+                <label><input type="radio" name="atividade" value="normal" checked> <span>12 meses ou mais</span></label>
+                <label><input type="radio" name="atividade" value="inicio"> <span>Menos de 12 meses</span></label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div id="bloco-normal" class="grid-2">
+            <div class="field">
+              <label class="label" for="rbt12">Receita bruta dos últimos 12 meses (RBT12)</label>
+              <input id="rbt12" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <p class="hint">Soma do faturamento dos 12 meses anteriores ao período de apuração.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="folha12">Folha de salários dos últimos 12 meses</label>
+              <input id="folha12" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <p class="hint">Salários, pró-labore, 13º, férias, INSS patronal e FGTS. Usada no Fator R.</p>
+            </div>
+          </div>
+
+          <div id="bloco-inicio" class="grid-3" hidden>
+            <div class="field">
+              <label class="label" for="meses">Meses de atividade anteriores</label>
+              <input id="meses" class="input" type="number" min="0" max="11" step="1" value="0">
+              <p class="hint">0 = este é o primeiro mês.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="receita-acum">Receita acumulada nesses meses</label>
+              <input id="receita-acum" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            </div>
+            <div class="field">
+              <label class="label" for="folha-acum" id="label-folha-acum">Folha acumulada nesses meses</label>
+              <input id="folha-acum" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            </div>
+            <p class="hint span-all">Em início de atividade, o RBT12 é proporcionalizado: média mensal × 12 (no 1º mês, receita do próprio mês × 12).</p>
+          </div>
+
+          <div class="receitas">
+            <div class="receitas__head">
+              <h3>Faturamento do mês por atividade</h3>
+              <p class="hint">Separe as receitas conforme a atividade e o tratamento tributário, como no PGDAS-D.</p>
+            </div>
+            <div id="linhas" class="linhas"></div>
+            <button id="btn-add" class="btn btn--link" type="button">+ Adicionar outra atividade</button>
+          </div>
+
+          <div id="form-erros" class="notice notice--error" role="alert" hidden></div>
+
+          <div class="actions">
+            <button class="btn btn--primary btn--lg" type="submit">Calcular estimativa</button>
+            <button id="btn-limpar" class="btn btn--secondary" type="button">Limpar</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <!-- RESULTADO -->
+    <aside class="col-result" aria-labelledby="titulo-resultado">
+      <section id="resultado" class="card card--result" aria-live="polite">
+        <header class="card__head">
+          <span class="step step--light">3</span>
+          <div>
+            <h2 id="titulo-resultado">Resultado estimado</h2>
+            <p class="card__sub" id="resultado-sub">Preencha os dados e clique em “Calcular estimativa”.</p>
+          </div>
+        </header>
+        <div id="resultado-corpo">
+          <div class="placeholder">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="6" width="28" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="15" y="11" width="18" height="7" rx="1.5" fill="currentColor" opacity=".25"/><g fill="currentColor"><circle cx="17" cy="25" r="2"/><circle cx="24" cy="25" r="2"/><circle cx="31" cy="25" r="2"/><circle cx="17" cy="32" r="2"/><circle cx="24" cy="32" r="2"/><circle cx="31" cy="32" r="2"/></g></svg>
+            <p>O valor estimado do DAS e a repartição dos tributos aparecerão aqui.</p>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <section id="como-funciona" class="container info">
+    <h2>Como o cálculo é feito</h2>
+    <div class="info__grid">
+      <div class="info__item">
+        <h3>1. Receita dos últimos 12 meses</h3>
+        <p>O RBT12 define a faixa de tributação dentro do anexo. Quanto maior o faturamento acumulado, maior a alíquota.</p>
+      </div>
+      <div class="info__item">
+        <h3>2. Alíquota efetiva</h3>
+        <p class="formula">(RBT12 × Alíquota nominal − Parcela a deduzir) ÷ RBT12</p>
+        <p>A alíquota efetiva é aplicada sobre o faturamento do mês.</p>
+      </div>
+      <div class="info__item">
+        <h3>3. Anexo e Fator R</h3>
+        <p>O anexo depende da atividade. Para alguns serviços, se a folha de 12 meses for de pelo menos 28% da receita, aplica-se o Anexo III; caso contrário, o Anexo V.</p>
+      </div>
+      <div class="info__item">
+        <h3>4. Repartição</h3>
+        <p>O DAS reúne IRPJ, CSLL, PIS, COFINS, CPP, IPI, ICMS e ISS, conforme percentuais fixados em lei para cada faixa.</p>
+      </div>
+    </div>
+
+    <details class="acc">
+      <summary>Ver tabelas dos Anexos I a V</summary>
+      <div id="tabelas-anexos" class="tabelas"></div>
+    </details>
+  </section>
+
+  <section id="avisos" class="container info">
+    <h2>Avisos importantes</h2>
+    <details class="acc" open>
+      <summary>Natureza ilustrativa da simulação</summary>
+      <p>Os resultados são estimativas para fins educativos e de planejamento. O valor oficial é apurado exclusivamente no PGDAS-D, no Portal do Simples Nacional, com base na escrituração da empresa. A RC2 Contábil não se responsabiliza por decisões tomadas apenas com base nesta simulação.</p>
+    </details>
+    <details class="acc">
+      <summary>Sugestão de anexo pelo CNAE</summary>
+      <p>A sugestão de anexo é automática e aproximada. O enquadramento correto depende da atividade efetivamente exercida, que pode diferir do CNAE cadastrado, e de regras específicas (atividades vedadas, tributação concomitante, transporte intermunicipal, locação de bens etc.). Você pode e deve ajustar o anexo manualmente.</p>
+    </details>
+    <details class="acc">
+      <summary>O que não está contemplado</summary>
+      <ul>
+        <li>Benefícios, isenções e reduções de ICMS/ISS concedidos por estados e municípios.</li>
+        <li>ISS fixo de sociedades de profissionais e alíquota mínima de ISS do município.</li>
+        <li>Excesso de sublimite ou limite dentro do próprio ano-calendário e seus efeitos.</li>
+        <li>Diferencial de alíquota (DIFAL), ICMS-ST devido como substituto, IOF e tributos fora do DAS.</li>
+        <li>Mudanças da Reforma Tributária (EC 132/2023 e LC 214/2025), incluindo CBS/IBS, que alteram o Simples a partir de 2027.</li>
+        <li>Multas, juros e parcelamentos.</li>
+      </ul>
+    </details>
+    <details class="acc">
+      <summary>Privacidade (LGPD)</summary>
+      <p>Esta página não usa cookies, rastreadores ou formulários de cadastro, e não envia os valores digitados a nenhum servidor: todo o cálculo acontece no seu navegador. Ao consultar um CNPJ, o número é enviado diretamente do seu navegador ao serviço público BrasilAPI (ou, se indisponível, ao CNPJ.ws), que retorna os dados cadastrais públicos da Receita Federal. Não guardamos histórico das consultas. Para fins estatísticos, o servidor registra os acessos à página com o endereço IP anonimizado (o final do endereço é descartado antes de ser gravado), sem cookies e sem qualquer dado que identifique o visitante.</p>
+    </details>
+    <details class="acc">
+      <summary>Base legal e atualização</summary>
+      <p>Lei Complementar nº 123/2006, com redação da LC nº 155/2016 (Anexos I a V, vigentes desde 01/01/2018), e Resolução CGSN nº 140/2018. Tabelas revisadas em <span id="revisao"></span>.</p>
+    </details>
+  </section>
+
+  <section class="container cta">
+    <div class="cta__box">
+      <div>
+        <h2>Quer pagar menos imposto de forma legal?</h2>
+        <p>A RC2 Contábil faz planejamento tributário, abertura de empresas e contabilidade mensal para pequenas e médias empresas de serviço e comércio.</p>
+      </div>
+      <div class="cta__actions">
+        <a class="btn btn--accent btn--lg" href="https://wa.me/5521973839229?text=Ol%C3%A1%2C%20vim%20pela%20calculadora%20do%20Simples%20Nacional%20e%20gostaria%20de%20falar%20com%20um%20contador." target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+        <a class="btn btn--ghost-dark btn--lg" href="mailto:rc2contabil.rcn@gmail.com?subject=Quero%20falar%20sobre%20meu%20Simples%20Nacional">Enviar e-mail</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/img/logo-rc2.png" alt="" width="44" height="44">
+        <div>
+          <strong>RC2 Contábil</strong>
+          <p>Niterói / São Gonçalo — RJ<br><a href="https://wa.me/5521973839229" target="_blank" rel="noopener noreferrer">(21) 97383-9229</a> · <a href="mailto:rc2contabil.rcn@gmail.com">rc2contabil.rcn@gmail.com</a></p>
+        </div>
+      </div>
+      <p class="footer__legal">Simulação ilustrativa, sem valor fiscal. Não substitui a apuração no PGDAS-D nem a orientação de um profissional de contabilidade. © <span id="ano"></span> RC2 Contábil.</p>
+    </div>
+  </footer>
+</body>
+</html>
