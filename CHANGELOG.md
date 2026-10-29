@@ -5,6 +5,14 @@ e [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [1.2.1] - 2026-10-29
+
+### Corrigido
+- Comparativo de regimes: novo campo RBT12 (receita dos 12 meses anteriores),
+  que passa a definir a faixa e a alíquota efetiva do Simples, o Fator R, o
+  limite de R$ 4,8 milhões e o sublimite de R$ 3,6 milhões. Antes, a receita
+  anual era usada como RBT12. Em branco, continua usando a receita anual.
+
 ## [1.2.0] - 2026-10-29
 
 ### Adicionado

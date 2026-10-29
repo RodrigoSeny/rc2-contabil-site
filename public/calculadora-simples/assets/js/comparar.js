@@ -99,6 +99,7 @@
       anexo: $('#c-anexo').value,
       reducao: Number($('#c-reducao').value),
       receita: valor('#c-receita', 'receita bruta anual', true),
+      rbt12: valor('#c-rbt12', 'RBT12'),
       folha: valor('#c-folha', 'folha anual'),
       comprasRegular: valor('#c-compras', 'compras de fornecedores do regime regular'),
       comprasSimples: valor('#c-compras-sn', 'compras de fornecedores do Simples')
@@ -240,7 +241,8 @@
     var res = porAno.filter(function (r) { return r.ano === entrada.ano; })[0];
     var corpo = $('#c-resultado-corpo');
     limpar(corpo);
-    $('#c-resultado-sub').textContent = 'Receita anual de ' + moeda(entrada.receita) + ' · valores anuais estimados.';
+    $('#c-resultado-sub').textContent = 'Receita anual de ' + moeda(entrada.receita) +
+      (res.rbt12 !== entrada.receita ? ' · RBT12 de ' + moeda(res.rbt12) : '') + ' · valores anuais estimados.';
 
     append(corpo, blocoRecomendacao(res));
     append(corpo, h('div', { class: 'res-section' },

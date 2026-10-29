@@ -94,3 +94,17 @@ test('2033: sem ICMS; IBS pleno no regime regular e na partilha do Simples', () 
 test('compararAnos devolve 2027 a 2033', () => {
   assert.deepEqual(RG.compararAnos(base).map((r) => r.ano), [2027, 2028, 2029, 2030, 2031, 2032, 2033]);
 });
+
+test('RBT12 informada define a faixa do Simples; o DAS incide sobre a receita', () => {
+  // Receita de 150 mil no ano, mas RBT12 de 600 mil: Anexo I 2027, 3ª faixa (9,5% − 13.860).
+  const r = RG.comparar({ ...base, rbt12: 600000 });
+  const a = cen(r, 'A');
+  assert.equal(r.rbt12, 600000);
+  assert.equal(a.simples.faixa, 3);
+  perto(a.simples.efetiva, (600000 * 0.095 - 13860) / 600000, 1e-12);
+  perto(a.das, 150000 * a.simples.efetiva, 0.02);
+  // RBT12 acima de R$ 4,8 milhões tira do Simples mesmo com receita anual baixa
+  assert.equal(cen(RG.comparar({ ...base, rbt12: 5000000 }), 'A').aplicavel, false);
+  // Sem RBT12, usa a receita anual
+  assert.equal(RG.comparar(base).rbt12, base.receita);
+});

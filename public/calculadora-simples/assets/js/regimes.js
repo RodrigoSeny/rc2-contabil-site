@@ -132,14 +132,15 @@
       nome: porFora ? 'Simples + IBS/CBS por fora' : 'Simples Nacional (tudo no DAS)',
       aplicavel: true, linhas: [], avisos: [], creditoCliente: 0, saldoCredor: 0
     };
-    if (e.receita > LIMITE_SIMPLES) {
+    if (e.rbt12 > LIMITE_SIMPLES) {
       c.aplicavel = false;
-      c.motivo = 'Receita acima de R$ 4,8 milhões: a empresa não pode ficar no Simples Nacional.';
+      c.motivo = 'RBT12 acima de R$ 4,8 milhões: a empresa não pode ficar no Simples Nacional.';
       return c;
     }
-    var s = simples(e.anexoEfetivo, e.receita, e.ano);
+    // Faixa e alíquota efetiva saem da RBT12; o DAS incide sobre a receita do período.
+    var s = simples(e.anexoEfetivo, e.rbt12, e.ano);
     c.simples = s;
-    var acimaSublimite = e.receita > SUBLIMITE;
+    var acimaSublimite = e.rbt12 > SUBLIMITE;
     var das = 0, ibsCbsDas = 0;
     Object.keys(s.pcts).forEach(function (t) {
       var v = e.receita * s.pcts[t];
@@ -171,7 +172,7 @@
     if (acimaSublimite) {
       var ii = icmsIssRegular(e);
       c.linhas.push(linha(ii.nome + ' (fora do DAS, acima do sublimite)', ii.valor));
-      c.avisos.push('Receita acima de R$ 3,6 milhões: ICMS, ISS e IBS saem do DAS e são pagos pelas regras normais.');
+      c.avisos.push('RBT12 acima de R$ 3,6 milhões: ICMS, ISS e IBS saem do DAS e são pagos pelas regras normais.');
     }
     if (e.anexoEfetivo === 'IV') {
       c.linhas.push(linha('INSS patronal (CPP) sobre a folha', e.folha * p.inssPatronalRat / 100, 'Anexo IV: a CPP não está no DAS'));
@@ -215,6 +216,7 @@
   /*
    * entrada = {
    *   ano, anexo: 'I'|'II'|'III'|'IV'|'V'|'FR', receita, folha (anuais),
+   *   rbt12? (receita dos 12 meses anteriores; define faixa, Fator R e limites do Simples),
    *   comprasRegular, comprasSimples (anuais), vendasEmpresas (0 a 1), reducao (0, 0.3 ou 0.6),
    *   icmsSaida, icmsEntrada, iss, margemReal (em %), presuncao?: { irpj, csll },
    *   premissas?: { ...sobrepõe RC2_REFORMA.PREMISSAS }
@@ -226,7 +228,9 @@
     Object.keys(entrada).forEach(function (k) { e[k] = entrada[k]; });
     e.folha = e.folha || 0;
     e.vendasEmpresas = Math.min(1, Math.max(0, e.vendasEmpresas || 0));
-    var ra = resolverAnexo(e.anexo, e.receita, e.folha);
+    // Sem RBT12 informada, supõe faturamento estável: a receita anual é a própria RBT12.
+    e.rbt12 = e.rbt12 > 0 ? e.rbt12 : e.receita;
+    var ra = resolverAnexo(e.anexo, e.rbt12, e.folha);
     e.anexoEfetivo = ra.anexo;
 
     var cenarios = [cenarioSimples(e, p, false), cenarioSimples(e, p, true), cenarioRegular(e, p, false), cenarioRegular(e, p, true)];
@@ -238,6 +242,7 @@
 
     return {
       ano: e.ano,
+      rbt12: e.rbt12,
       anexoEfetivo: ra.anexo,
       fatorR: ra.fatorR,
       aliquotasIbsCbs: aliquotasIbsCbs(e.ano, p),
