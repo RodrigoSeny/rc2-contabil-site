@@ -800,7 +800,7 @@
 
     $('#tab-simples').addEventListener('click', function () { setModo('simples'); });
     $('#tab-completa').addEventListener('click', function () { setModo('completa'); });
-    $('.modos').addEventListener('keydown', function (ev) {
+    $('.modos__grupo').addEventListener('keydown', function (ev) {
       if (ev.key !== 'ArrowLeft' && ev.key !== 'ArrowRight') return;
       setModo(state.modo === 'simples' ? 'completa' : 'simples', true);
     });

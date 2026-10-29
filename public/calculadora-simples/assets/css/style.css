@@ -351,3 +351,46 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-sp
   html { scroll-behavior: auto; }
   * { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Comparativo de regimes (comparar.html) ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.modos--3 { grid-template-columns: repeat(3, 1fr); }
+a.modos__tab { text-decoration: none; }
+.modos__tab[aria-current="page"] { border: 2px solid var(--navy-800); background: var(--navy-50); padding: 11px 15px; }
+.modos__tab[aria-current="page"] strong { color: var(--navy-800); }
+@media (max-width: 760px) { .modos--3 { grid-template-columns: 1fr; } }
+
+.comparador { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 24px; margin-bottom: 36px; }
+.comparador > form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+.comparador select.input { max-width: 100%; text-overflow: ellipsis; }
+.premissas { margin-top: 4px; }
+.premissas > .grid-3 { padding-top: 6px; }
+.check { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; color: var(--ink-2); cursor: pointer; }
+.check input { margin-top: 3px; }
+.recomendacao p { margin: 6px 0 0; }
+
+.tabela-anos td small { display: block; color: var(--ink-3); font-size: .74rem; }
+.tabela-anos td.melhor { background: var(--ok-bg); font-weight: 700; color: var(--ok-ink); }
+.tabela-anos td .tag { margin-top: 4px; }
+.tabela-anos tbody th { text-transform: none; font-size: .88rem; letter-spacing: 0; background: transparent; border-bottom: 1px solid var(--line); }
+
+.bar--regime { grid-template-columns: minmax(120px, 210px) 1fr auto; }
+.bar__fill--ok { background: var(--accent); }
+
+.regimes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
+.regime { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.regime--melhor { border: 2px solid var(--accent); padding: 13px; }
+.regime__head { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.regime__head h4 { margin: 0; font-size: 1rem; color: var(--navy-900); }
+.regime__total span { display: block; font-size: 1.4rem; font-weight: 700; color: var(--navy-800); font-variant-numeric: tabular-nums; }
+.regime__total small { color: var(--ink-3); font-size: .82rem; }
+.regime__dl { grid-template-columns: 1fr; }
+
+@media print {
+  .comparador > form { display: none !important; }
+  .regime { break-inside: avoid; }
+  .bar__fill--ok, .tabela-anos td.melhor { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+/* Na página da calculadora, as duas abas ficam num grupo (tablist) e o comparativo é um link. */
+.modos__grupo { display: contents; }
+.modos__tab strong .tag { margin-left: 6px; vertical-align: middle; font-size: .7rem; }

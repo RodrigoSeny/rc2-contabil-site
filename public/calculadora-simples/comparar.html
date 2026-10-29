@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comparar regimes na Reforma Tributária | RC2 Contábil</title>
+  <meta name="description" content="Compare Simples Nacional, Simples com IBS/CBS por fora, Lucro Presumido e Lucro Real com as regras da Reforma Tributária (LC 214/2025), de 2027 a 2033. Simulação ilustrativa — RC2 Contábil.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#062F66">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Comparar regimes na Reforma Tributária | RC2 Contábil">
+  <meta property="og:description" content="Qual regime pesa menos para a sua empresa de 2027 a 2033: Simples, Simples com IBS/CBS por fora, Lucro Presumido ou Lucro Real.">
+  <meta property="og:image" content="assets/img/logo-rc2.png">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/reforma.js" defer></script>
+  <script src="assets/js/regimes.js" defer></script>
+  <script src="assets/js/comparar.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#comparador">Ir para o comparativo</a>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="./" aria-label="RC2 Contábil — início">
+        <img src="assets/img/logo-rc2.png" alt="Logo RC2 Contábil" width="52" height="52">
+        <span class="brand__text">
+          <strong>RC2 Contábil</strong>
+          <small>Contabilidade para empresas</small>
+        </span>
+      </a>
+      <nav class="topbar__nav" aria-label="Navegação principal">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#avisos">Avisos legais</a>
+        <a class="btn btn--ghost-light" href="https://wa.me/5521973839229?text=Ol%C3%A1%2C%20usei%20o%20comparativo%20de%20regimes%20da%20Reforma%20Tribut%C3%A1ria%20e%20gostaria%20de%20falar%20com%20um%20contador." target="_blank" rel="noopener noreferrer">Fale com um contador</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero__inner">
+      <div>
+        <p class="eyebrow">Reforma Tributária · 2027 a 2033</p>
+        <h1>Qual regime vale mais a pena?</h1>
+        <p class="hero__lead">Compare o imposto estimado da sua empresa no Simples Nacional, no Simples com IBS/CBS pagos por fora, no Lucro Presumido e no Lucro Real, com as regras da LC 214/2025, ano a ano até 2033.</p>
+        <ul class="hero__badges">
+          <li>Tabelas da LC 214/2025</li>
+          <li>Sem cadastro</li>
+          <li>Nenhum dado armazenado</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="notice notice--warning" role="note">
+      <svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20.5h20L12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.2" fill="currentColor"/></svg>
+      <div>
+        <strong>Simulação ilustrativa — não é recomendação de regime.</strong>
+        As alíquotas de referência da CBS e do IBS ainda não foram fixadas pelo Senado; o comparativo usa as premissas indicadas abaixo, que você pode alterar. A escolha do regime depende de informações que esta página não conhece (benefícios fiscais, produtos com tributação monofásica ou substituição tributária, custos reais, contratos, clientes). Decida sempre com um contador.
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <nav class="modos modos--3" aria-label="Ferramentas">
+      <a class="modos__tab" href="./">
+        <strong>Calcular o DAS — simples</strong>
+        <span>CNPJ, receita de 12 meses, faturamento e folha</span>
+      </a>
+      <a class="modos__tab" href="./#completa">
+        <strong>Calcular o DAS — completa</strong>
+        <span>Várias atividades, ST, monofásico, ISS retido</span>
+      </a>
+      <a class="modos__tab" href="comparar.html" aria-current="page">
+        <strong>Comparar regimes</strong>
+        <span>Reforma Tributária, de 2027 a 2033</span>
+      </a>
+    </nav>
+  </div>
+
+  <main id="comparador" class="container comparador">
+    <form id="form-comparar" novalidate autocomplete="off">
+
+      <section class="card" aria-labelledby="c-etapa1">
+        <header class="card__head">
+          <span class="step">1</span>
+          <div>
+            <h2 id="c-etapa1">A empresa</h2>
+            <p class="card__sub">Valores anuais em reais. Use vírgula para os centavos.</p>
+          </div>
+        </header>
+        <div class="grid-3">
+          <div class="field">
+            <label class="label" for="c-ano">Ano para o detalhamento</label>
+            <select id="c-ano" class="input"></select>
+            <p class="hint">O resumo mostra todos os anos de 2027 a 2033.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="c-anexo">Atividade</label>
+            <select id="c-anexo" class="input">
+              <option value="I">Comércio ou indústria (Anexo I)</option>
+              <option value="II">Indústria com IPI mantido — Zona Franca (Anexo II)</option>
+              <option value="III">Serviços (Anexo III)</option>
+              <option value="IV">Serviços: construção, limpeza, vigilância, advocacia (Anexo IV)</option>
+              <option value="V">Serviços (Anexo V)</option>
+              <option value="FR">Serviço sujeito ao Fator R (III ou V)</option>
+            </select>
+            <p class="hint">A partir de 2027 a indústria vai para o Anexo I, salvo produtos com IPI mantido.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="c-reducao">Redução de IBS/CBS da atividade</label>
+            <select id="c-reducao" class="input">
+              <option value="0">Nenhuma (alíquota cheia)</option>
+              <option value="0.3">30% — profissões regulamentadas (art. 127)</option>
+              <option value="0.6">60% — saúde, educação e outros (arts. 128 a 142)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label" for="c-receita">Receita bruta anual</label>
+            <input id="c-receita" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+          </div>
+          <div class="field">
+            <label class="label" for="c-folha">Folha anual (salários e pró-labore)</label>
+            <input id="c-folha" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            <p class="hint">Usada no Fator R e nos encargos sobre a folha.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="c-b2b">Vendas para outras empresas (%)</label>
+            <input id="c-b2b" class="input money" type="text" inputmode="decimal" placeholder="0" value="0">
+            <p class="hint">Parte das vendas para empresas que aproveitam crédito de IBS/CBS.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="c-etapa2">
+        <header class="card__head">
+          <span class="step">2</span>
+          <div>
+            <h2 id="c-etapa2">Compras, tributos locais e lucro</h2>
+            <p class="card__sub">Fora do DAS, as compras geram crédito de IBS/CBS (e de ICMS, no comércio).</p>
+          </div>
+        </header>
+        <div class="grid-3">
+          <div class="field">
+            <label class="label" for="c-compras">Compras e despesas anuais de fornecedores do regime regular</label>
+            <input id="c-compras" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            <p class="hint">Mercadorias, insumos, aluguel, energia, serviços… de empresas fora do Simples.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="c-compras-sn">Compras anuais de fornecedores do Simples</label>
+            <input id="c-compras-sn" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            <p class="hint">Geram crédito menor: só o IBS/CBS pago no DAS do fornecedor.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="c-margem">Lucro antes do IR (% da receita)</label>
+            <input id="c-margem" class="input money" type="text" inputmode="decimal" value="10">
+            <p class="hint">Usado só no Lucro Real.</p>
+          </div>
+          <div class="field" data-tipo="comercio">
+            <label class="label" for="c-icms-saida">ICMS nas vendas (%)</label>
+            <input id="c-icms-saida" class="input money" type="text" inputmode="decimal" value="20">
+            <p class="hint">Alíquota média sobre as vendas (RJ: 20% + 2% de FECP em muitos produtos).</p>
+          </div>
+          <div class="field" data-tipo="comercio">
+            <label class="label" for="c-icms-entrada">ICMS nas compras (%)</label>
+            <input id="c-icms-entrada" class="input money" type="text" inputmode="decimal" value="12">
+            <p class="hint">Crédito médio de ICMS nas compras do regime regular.</p>
+          </div>
+          <div class="field" data-tipo="servico" hidden>
+            <label class="label" for="c-iss">ISS (%)</label>
+            <input id="c-iss" class="input money" type="text" inputmode="decimal" value="5">
+            <p class="hint">Alíquota do município (de 2% a 5%).</p>
+          </div>
+          <div class="field">
+            <label class="label" for="c-pres-irpj">Presunção do IRPJ (%)</label>
+            <input id="c-pres-irpj" class="input money" type="text" inputmode="decimal" value="8">
+            <p class="hint">Lucro Presumido: 8% comércio/indústria, 32% serviços em geral.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="c-pres-csll">Presunção da CSLL (%)</label>
+            <input id="c-pres-csll" class="input money" type="text" inputmode="decimal" value="12">
+            <p class="hint">12% comércio/indústria, 32% serviços em geral.</p>
+          </div>
+        </div>
+
+        <details class="acc premissas">
+          <summary>Premissas da Reforma (alíquotas ainda não fixadas)</summary>
+          <div class="grid-3">
+            <div class="field">
+              <label class="label" for="p-cbs">CBS — alíquota de referência (%)</label>
+              <input id="p-cbs" class="input money" type="text" inputmode="decimal">
+              <p class="hint">TCU propôs 11,3% para 2027 (28/10/2026); o Senado fixa até 15/12/2026. Em 2027–2028 cobra-se 0,1 ponto a menos.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="p-ibs">IBS pleno — estadual + municipal (%)</label>
+              <input id="p-ibs" class="input money" type="text" inputmode="decimal">
+              <p class="hint">Estimativa. Em 2027–2028 o IBS é 0,1%; de 2029 a 2032 sobe 10% do pleno por ano; 2033 em diante, pleno.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="p-cred-sn">Crédito médio em compras do Simples (%)</label>
+              <input id="p-cred-sn" class="input money" type="text" inputmode="decimal">
+              <p class="hint">Fornecedor do Simples que paga tudo no DAS gera crédito só do que pagou no DAS.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="p-inss">INSS patronal + RAT sobre a folha (%)</label>
+              <input id="p-inss" class="input money" type="text" inputmode="decimal">
+            </div>
+            <div class="field">
+              <label class="label" for="p-terceiros">Terceiros — Sistema S e salário-educação (%)</label>
+              <input id="p-terceiros" class="input money" type="text" inputmode="decimal">
+            </div>
+            <div class="field">
+              <span class="label">LC 224/2025 no Lucro Presumido</span>
+              <label class="check"><input id="p-lc224" type="checkbox"> Aplicar +10% na presunção sobre a receita acima de R$ 5 milhões</label>
+              <p class="hint">Questionado no STF e afastado por liminares para alguns contribuintes.</p>
+            </div>
+          </div>
+        </details>
+
+        <div id="c-erros" class="notice notice--error" role="alert" hidden></div>
+        <div class="actions">
+          <button class="btn btn--primary btn--lg" type="submit">Comparar regimes</button>
+          <button id="c-limpar" class="btn btn--secondary" type="button">Limpar</button>
+        </div>
+      </section>
+    </form>
+
+    <section id="c-resultado" class="card card--result" aria-live="polite" hidden>
+      <header class="card__head">
+        <span class="step step--light">3</span>
+        <div>
+          <h2>Resultado estimado</h2>
+          <p class="card__sub" id="c-resultado-sub"></p>
+        </div>
+      </header>
+      <div id="c-resultado-corpo"></div>
+    </section>
+  </main>
+
+  <section id="como-funciona" class="container info">
+    <h2>Como o comparativo é feito</h2>
+    <div class="info__grid">
+      <div class="info__item">
+        <h3>Simples (tudo no DAS)</h3>
+        <p>Mesmas alíquotas de hoje; muda a partilha: PIS e COFINS viram CBS e, de 2029 a 2033, o ICMS/ISS vai virando IBS (Anexos da LC 123 na redação da LC 214). Quem compra de você só aproveita, de crédito, o IBS/CBS que está dentro do DAS.</p>
+      </div>
+      <div class="info__item">
+        <h3>Simples + IBS/CBS por fora</h3>
+        <p>A empresa continua no Simples, mas paga IBS e CBS pelo regime regular: aproveita créditos das compras e seus clientes aproveitam crédito integral. Opção semestral e irretratável, feita em setembro (para janeiro) e março (para julho).</p>
+      </div>
+      <div class="info__item">
+        <h3>Lucro Presumido</h3>
+        <p>IRPJ e CSLL sobre um lucro presumido (8%/12% no comércio, 32% nos serviços), mais IBS/CBS com créditos, ICMS ou ISS e encargos sobre a folha. PIS e COFINS deixam de existir em 2027.</p>
+      </div>
+      <div class="info__item">
+        <h3>Lucro Real</h3>
+        <p>IRPJ (15% + 10% sobre o que passar de R$ 240 mil por ano) e CSLL (9%) sobre o lucro que você informar; os demais tributos como no Presumido.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="avisos" class="container info">
+    <h2>Avisos importantes</h2>
+    <details class="acc" open>
+      <summary>Natureza ilustrativa</summary>
+      <p>Os resultados são estimativas anuais para fins educativos e de planejamento, supondo faturamento estável ao longo do ano. Não são recomendação de regime nem orientação contábil ou jurídica. A RC2 Contábil não se responsabiliza por decisões tomadas apenas com base nesta simulação.</p>
+    </details>
+    <details class="acc">
+      <summary>O que não está contemplado</summary>
+      <ul>
+        <li>Tributação monofásica, substituição tributária, regimes específicos (combustíveis, serviços financeiros, imóveis, saúde suplementar etc.) e Imposto Seletivo.</li>
+        <li>Benefícios, isenções e reduções de ICMS/ISS de estados e municípios; DIFAL; ISS fixo de sociedades de profissionais.</li>
+        <li>Diferenças de crédito por alíquotas reduzidas do fornecedor, créditos presumidos e ressarcimento de saldo credor (o saldo credor aparece, mas não reduz o custo).</li>
+        <li>Ajustes do lucro real (adições, exclusões, prejuízos anteriores), juros sobre capital próprio e distribuição de lucros.</li>
+        <li>IPI de produtos da Zona Franca de Manaus fora do Simples.</li>
+      </ul>
+    </details>
+    <details class="acc">
+      <summary>Privacidade (LGPD)</summary>
+      <p>Esta página não usa cookies, rastreadores ou formulários de cadastro, e não envia os valores digitados a nenhum servidor: todo o cálculo acontece no seu navegador. O servidor registra os acessos à página com o endereço IP anonimizado, sem cookies e sem dado que identifique o visitante.</p>
+    </details>
+    <details class="acc">
+      <summary>Base legal e atualização</summary>
+      <p>Lei Complementar nº 214/2025 (com a redação da LC nº 227/2026): arts. 41, 47, 127 a 142, 343 a 365 e Anexos XVIII a XXII, que dão nova redação aos Anexos I a V da LC nº 123/2006. EC nº 132/2023 (ADCT, arts. 126 a 128). LC nº 224/2025 (presunção do Lucro Presumido). Lei nº 9.249/1995 (Lucro Presumido). Revisado em <span id="c-revisao"></span>. Confira a lei no <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" target="_blank" rel="noopener noreferrer">Planalto</a>.</p>
+    </details>
+  </section>
+
+  <section class="container cta">
+    <div class="cta__box">
+      <div>
+        <h2>Quer decidir o regime com segurança?</h2>
+        <p>A RC2 Contábil faz o planejamento tributário da sua empresa para a Reforma, com os seus números reais.</p>
+      </div>
+      <div class="cta__actions">
+        <a class="btn btn--accent btn--lg" href="https://wa.me/5521973839229?text=Ol%C3%A1%2C%20usei%20o%20comparativo%20de%20regimes%20da%20Reforma%20Tribut%C3%A1ria%20e%20gostaria%20de%20falar%20com%20um%20contador." target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+        <a class="btn btn--ghost-dark btn--lg" href="mailto:rc2contabil.rcn@gmail.com?subject=Planejamento%20para%20a%20Reforma%20Tribut%C3%A1ria">Enviar e-mail</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/img/logo-rc2.png" alt="" width="44" height="44">
+        <div>
+          <strong>RC2 Contábil</strong>
+          <p>Niterói / São Gonçalo — RJ<br><a href="https://wa.me/5521973839229" target="_blank" rel="noopener noreferrer">(21) 97383-9229</a> · <a href="mailto:rc2contabil.rcn@gmail.com">rc2contabil.rcn@gmail.com</a></p>
+        </div>
+      </div>
+      <p class="footer__legal">Simulação ilustrativa, sem valor fiscal. Não substitui a orientação de um profissional de contabilidade. © <span id="ano"></span> RC2 Contábil.</p>
+    </div>
+  </footer>
+</body>
+</html>

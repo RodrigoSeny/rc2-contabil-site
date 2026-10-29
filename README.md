@@ -2,7 +2,9 @@
 
 Site público da RC2 Contábil em **https://contabil.rc2sistemas.cloud**.
 Hoje contém a **Calculadora do Simples Nacional** (`/calculadora-simples/`),
-com versão simples e completa.
+com versão simples e completa, e o **Comparativo de regimes na Reforma
+Tributária** (`/calculadora-simples/comparar.html`: Simples, Simples com
+IBS/CBS por fora, Lucro Presumido e Lucro Real, de 2027 a 2033).
 
 Separado de propósito do sistema de gestão contábil (`controle-contabil`) e dos
 sistemas da RC2 Sistemas: é conteúdo público e estático, servido direto pelo
@@ -17,13 +19,19 @@ public/                         ← raiz servida pelo Nginx (só isto fica expos
 ├── robots.txt
 └── calculadora-simples/
     ├── index.html
+    ├── comparar.html           ← comparativo de regimes (Reforma Tributária)
     └── assets/
         ├── css/style.css
         ├── img/logo-rc2.png
         └── js/
             ├── tabelas.js      ← alíquotas, repartição, MEI e mapa CNAE → anexo
             ├── calculo.js      ← motor de cálculo (funções puras)
-            └── app.js          ← interface, abas simples/completa, consulta de CNPJ
+            ├── app.js          ← interface, abas simples/completa, consulta de CNPJ
+            ├── reforma.js      ← Anexos do Simples 2027–2033 (LC 214) e premissas da reforma
+            ├── regimes.js      ← cálculo dos 4 regimes (funções puras)
+            └── comparar.js     ← interface do comparativo
+test/regimes.test.js            ← testes do comparativo: node --test test/regimes.test.js
+ferramentas/lc214/              ← extrai do Planalto as tabelas usadas em reforma.js
 deploy/
 ├── nginx-contabil.conf         ← virtual host + cabeçalhos de segurança + log anônimo
 └── atualizar.sh                ← git pull na VPS
@@ -51,6 +59,10 @@ bash /var/www/rc2-contabil-site/deploy/atualizar.sh
 
 - **Tabelas do Simples**: `public/calculadora-simples/assets/js/tabelas.js` (constante `REVISAO`).
 - **MEI**: atualizar `MEI.salarioMinimo` todo janeiro.
-- **Reforma Tributária** (LC 214/2025): revisar antes de janeiro/2027.
+- **Reforma Tributária** (LC 214/2025): a calculadora do DAS ainda usa as
+  tabelas de 2026; revisar antes de janeiro/2027. No comparativo
+  (`reforma.js`), atualizar `PREMISSAS.cbsReferencia` quando o Senado fixar a
+  alíquota da CBS (prazo 15/12/2026) e `ibsPleno` quando houver a do IBS. Se a
+  lei mudar os Anexos, regerar as tabelas com `ferramentas/lc214/` e rodar os testes.
 - **APIs de CNPJ**: se mudarem, ajustar `APIS` em `app.js` **e** o `connect-src` da CSP em `deploy/nginx-contabil.conf`.
 - **Visitas**: o Nginx grava `/var/log/nginx-rc2/contabil.access.log` com IP anonimizado.

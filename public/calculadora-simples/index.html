@@ -65,15 +65,21 @@
   </div>
 
   <div class="container">
-    <div class="modos" role="tablist" aria-label="Tipo de simulação">
-      <button id="tab-simples" class="modos__tab" type="button" role="tab" aria-selected="true" aria-controls="calculadora">
-        <strong>Versão simples</strong>
-        <span>CNPJ, receita de 12 meses, faturamento e folha</span>
-      </button>
-      <button id="tab-completa" class="modos__tab" type="button" role="tab" aria-selected="false" aria-controls="calculadora">
-        <strong>Versão completa</strong>
-        <span>Várias atividades, ST, monofásico, ISS retido, início de atividade</span>
-      </button>
+    <div class="modos modos--3">
+      <div class="modos__grupo" role="tablist" aria-label="Tipo de simulação">
+        <button id="tab-simples" class="modos__tab" type="button" role="tab" aria-selected="true" aria-controls="calculadora">
+          <strong>Versão simples</strong>
+          <span>CNPJ, receita de 12 meses, faturamento e folha</span>
+        </button>
+        <button id="tab-completa" class="modos__tab" type="button" role="tab" aria-selected="false" aria-controls="calculadora">
+          <strong>Versão completa</strong>
+          <span>Várias atividades, ST, monofásico, ISS retido, início de atividade</span>
+        </button>
+      </div>
+      <a class="modos__tab" href="comparar.html">
+        <strong>Comparar regimes <span class="tag tag--ok">novo</span></strong>
+        <span>Reforma Tributária: Simples, Presumido e Real, de 2027 a 2033</span>
+      </a>
     </div>
   </div>
 
@@ -287,7 +293,7 @@
         <li>ISS fixo de sociedades de profissionais e alíquota mínima de ISS do município.</li>
         <li>Excesso de sublimite ou limite dentro do próprio ano-calendário e seus efeitos.</li>
         <li>Diferencial de alíquota (DIFAL), ICMS-ST devido como substituto, IOF e tributos fora do DAS.</li>
-        <li>Mudanças da Reforma Tributária (EC 132/2023 e LC 214/2025), incluindo CBS/IBS, que alteram o Simples a partir de 2027.</li>
+        <li>Mudanças da Reforma Tributária (EC 132/2023 e LC 214/2025), incluindo CBS/IBS, que alteram o Simples a partir de 2027 — para elas, use o <a href="comparar.html">comparativo de regimes</a>.</li>
         <li>Multas, juros e parcelamentos.</li>
       </ul>
     </details>
