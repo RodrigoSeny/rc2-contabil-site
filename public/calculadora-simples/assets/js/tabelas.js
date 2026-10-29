@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  var REVISAO = 'setembro/2026';
+  var REVISAO = 'outubro/2026';
 
   var LIMITES = [180000, 360000, 720000, 1800000, 3600000, 4800000];
   var SUBLIMITE_ICMS_ISS = 3600000;
@@ -110,8 +110,10 @@
   var TRATAMENTOS = {
     normal:       { rotulo: 'Tributação normal', exclui: [], anexos: ['I', 'II', 'III', 'IV', 'V'] },
     st:           { rotulo: 'ICMS por substituição tributária', exclui: ['ICMS'], anexos: ['I', 'II'] },
-    mono:         { rotulo: 'PIS/COFINS monofásico', exclui: ['PIS', 'COFINS'], anexos: ['I', 'II'] },
-    st_mono:      { rotulo: 'ICMS-ST + PIS/COFINS monofásico', exclui: ['ICMS', 'PIS', 'COFINS'], anexos: ['I', 'II'] },
+    // A partir de 2027 o PIS/COFINS deixa de existir; o monofásico passa a valer para IBS/CBS
+    // (combustíveis) — calculo.js converte a exclusão conforme o ano.
+    mono:         { rotulo: 'Tributação monofásica (PIS/COFINS; a partir de 2027, IBS/CBS)', exclui: ['PIS', 'COFINS'], anexos: ['I', 'II'] },
+    st_mono:      { rotulo: 'ICMS-ST + tributação monofásica', exclui: ['ICMS', 'PIS', 'COFINS'], anexos: ['I', 'II'] },
     iss_retido:   { rotulo: 'ISS retido pelo tomador', exclui: ['ISS'], anexos: ['III', 'IV', 'V'], retido: true },
     exportacao:   { rotulo: 'Exportação', exclui: ['PIS', 'COFINS', 'ICMS', 'IPI', 'ISS'], anexos: ['I', 'II', 'III', 'IV', 'V'] }
   };

@@ -16,6 +16,7 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="assets/js/tabelas.js" defer></script>
+  <script src="assets/js/reforma.js" defer></script>
   <script src="assets/js/calculo.js" defer></script>
   <script src="assets/js/app.js" defer></script>
 </head>
@@ -46,7 +47,7 @@
         <h1>Calculadora do Simples Nacional</h1>
         <p class="hero__lead">Estime o valor do DAS do mês a partir do faturamento, com consulta de CNPJ, sugestão de anexo pela atividade (CNAE), Fator R e a repartição de cada tributo.</p>
         <ul class="hero__badges">
-          <li>Tabelas da LC 123/2006</li>
+          <li>Tabelas da LC 123/2006 e da LC 214/2025</li>
           <li>Sem cadastro</li>
           <li>Nenhum dado armazenado</li>
         </ul>
@@ -169,6 +170,7 @@
             <div class="field">
               <label class="label" for="periodo">Período de apuração</label>
               <input id="periodo" class="input" type="month">
+              <p class="hint">A partir de janeiro/2027 o cálculo usa as tabelas da Reforma (LC 214/2025).</p>
             </div>
             <fieldset class="field">
               <legend class="label">Tempo de atividade</legend>
@@ -266,7 +268,7 @@
       </div>
       <div class="info__item">
         <h3>4. Repartição</h3>
-        <p>O DAS reúne IRPJ, CSLL, PIS, COFINS, CPP, IPI, ICMS e ISS, conforme percentuais fixados em lei para cada faixa.</p>
+        <p>O DAS reúne IRPJ, CSLL, PIS, COFINS, CPP, IPI, ICMS e ISS, conforme percentuais fixados em lei para cada faixa. A partir de 2027, a CBS substitui o PIS e a COFINS e o IBS entra no DAS, substituindo aos poucos o ICMS e o ISS até 2033.</p>
       </div>
     </div>
 
@@ -293,7 +295,7 @@
         <li>ISS fixo de sociedades de profissionais e alíquota mínima de ISS do município.</li>
         <li>Excesso de sublimite ou limite dentro do próprio ano-calendário e seus efeitos.</li>
         <li>Diferencial de alíquota (DIFAL), ICMS-ST devido como substituto, IOF e tributos fora do DAS.</li>
-        <li>Mudanças da Reforma Tributária (EC 132/2023 e LC 214/2025), incluindo CBS/IBS, que alteram o Simples a partir de 2027 — para elas, use o <a href="comparar.html">comparativo de regimes</a>.</li>
+        <li>Opção por recolher IBS e CBS fora do DAS (regime regular), créditos de IBS/CBS e comparação com o Lucro Presumido ou Real — para isso, use o <a href="comparar.html">comparativo de regimes</a>.</li>
         <li>Multas, juros e parcelamentos.</li>
       </ul>
     </details>
@@ -303,7 +305,7 @@
     </details>
     <details class="acc">
       <summary>Base legal e atualização</summary>
-      <p>Lei Complementar nº 123/2006, com redação da LC nº 155/2016 (Anexos I a V, vigentes desde 01/01/2018), e Resolução CGSN nº 140/2018. Tabelas revisadas em <span id="revisao"></span>.</p>
+      <p>Até 2026: Lei Complementar nº 123/2006, com redação da LC nº 155/2016 (Anexos I a V, vigentes desde 01/01/2018), e Resolução CGSN nº 140/2018. A partir de 2027: Anexos I a V na redação da LC nº 214/2025 (Anexos XVIII a XXII, com as alterações da LC nº 227/2026), escolhidos pelo ano do período de apuração. Tabelas revisadas em <span id="revisao"></span>.</p>
     </details>
   </section>
 

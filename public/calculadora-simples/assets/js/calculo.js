@@ -1,11 +1,48 @@
 /*
  * RC2 Contábil — Motor de cálculo do Simples Nacional (funções puras).
  * Alíquota efetiva = (RBT12 × Alíquota nominal − Parcela a deduzir) ÷ RBT12
+ * Até 2026: tabelas da LC 123/2006 (tabelas.js). A partir de 2027: Anexos na redação da
+ * LC 214/2025 (reforma.js), com CBS e IBS no lugar de PIS e COFINS e, de 2029 a 2033, o IBS
+ * substituindo aos poucos o ICMS e o ISS.
  */
 (function (root) {
   'use strict';
 
   var T = root.RC2_TABELAS;
+  var RF = root.RC2_REFORMA;
+  var PRIMEIRO_ANO_REFORMA = 2027;
+  var cacheAnexos = {};
+
+  /* Anexo vigente no ano: { codigo, nome, curto, faixas: [{ ate, aliq, pd }], tributos, reparticao }. */
+  function anexoDoAno(anexoKey, ano) {
+    var base = T.ANEXOS[anexoKey];
+    if (!base || !RF || !(ano >= PRIMEIRO_ANO_REFORMA)) return base;
+    var chave = anexoKey + '-' + RF.periodoAliquotas(ano) + '-' + RF.periodoPartilha(ano);
+    if (cacheAnexos[chave]) return cacheAnexos[chave];
+    var nova = RF.ANEXOS_SIMPLES[anexoKey];
+    var aliq = nova.aliquotas[RF.periodoAliquotas(ano)];
+    var part = nova.partilha[RF.periodoPartilha(ano)];
+    return (cacheAnexos[chave] = {
+      codigo: base.codigo,
+      nome: base.nome,
+      curto: base.curto,
+      faixas: T.LIMITES.map(function (ate, i) { return { ate: ate, aliq: aliq[i][0] / 100, pd: aliq[i][1] }; }),
+      tributos: part.tributos,
+      reparticao: part.faixas.map(function (linha) {
+        var o = {};
+        part.tributos.forEach(function (t, i) { o[t] = linha[i]; });
+        return o;
+      })
+    });
+  }
+
+  /* A partir de 2027 o PIS e a COFINS deixam de existir: o que era excluído deles vale para CBS e IBS. */
+  function exclusoesDoAno(exclui, ano) {
+    if (!(ano >= PRIMEIRO_ANO_REFORMA)) return exclui;
+    var out = exclui.slice();
+    if (exclui.indexOf('PIS') >= 0 || exclui.indexOf('COFINS') >= 0) out.push('CBS', 'IBS');
+    return out;
+  }
 
   function arred(v) {
     return Math.round((v + Number.EPSILON) * 100) / 100;
@@ -18,8 +55,8 @@
     return -1;
   }
 
-  function aliquotaEfetiva(anexoKey, rbt12) {
-    var anexo = T.ANEXOS[anexoKey];
+  function aliquotaEfetiva(anexoKey, rbt12, ano) {
+    var anexo = anexoDoAno(anexoKey, ano);
     var idx = faixaIndex(rbt12);
     if (!anexo || idx < 0) return null;
     var f = anexo.faixas[idx];
@@ -28,9 +65,9 @@
   }
 
   /* Percentual efetivo de cada tributo, com teto de 5% para o ISS
-   * (excedente redistribuído proporcionalmente aos tributos federais). */
-  function percentuaisTributos(anexoKey, idx, efetiva) {
-    var anexo = T.ANEXOS[anexoKey];
+   * (excedente redistribuído proporcionalmente aos tributos federais e, desde 2027, ao IBS). */
+  function percentuaisTributos(anexoKey, idx, efetiva, ano) {
+    var anexo = anexoDoAno(anexoKey, ano);
     var rep = anexo.reparticao[idx];
     var out = {};
     anexo.tributos.forEach(function (t) { out[t] = efetiva * (rep[t] || 0) / 100; });
@@ -51,23 +88,24 @@
     return { fator: fator, anexo: fator >= T.FATOR_R_MINIMO ? 'III' : 'V' };
   }
 
-  function calcularReceita(anexoKey, valor, tratamentoKey, rbt12) {
-    var ae = aliquotaEfetiva(anexoKey, rbt12);
+  function calcularReceita(anexoKey, valor, tratamentoKey, rbt12, ano) {
+    var ae = aliquotaEfetiva(anexoKey, rbt12, ano);
     if (!ae) return null;
     var trat = T.TRATAMENTOS[tratamentoKey] || T.TRATAMENTOS.normal;
-    var pcts = percentuaisTributos(anexoKey, ae.faixa, ae.efetiva);
+    var exclui = exclusoesDoAno(trat.exclui, ano);
+    var pcts = percentuaisTributos(anexoKey, ae.faixa, ae.efetiva, ano);
     var acimaSublimite = rbt12 > T.SUBLIMITE_ICMS_ISS;
 
     var tributos = [];
     var das = 0, fora = 0, retido = 0;
-    T.ANEXOS[anexoKey].tributos.forEach(function (nome) {
+    anexoDoAno(anexoKey, ano).tributos.forEach(function (nome) {
       var pct = pcts[nome];
       var v = arred(valor * pct);
       var item = { nome: nome, pct: pct, valor: v, noDas: true, motivo: '' };
-      if (trat.exclui.indexOf(nome) >= 0) {
+      if (exclui.indexOf(nome) >= 0) {
         item.noDas = false;
         item.motivo = trat.retido ? 'retido' : 'excluido';
-      } else if (acimaSublimite && (nome === 'ICMS' || nome === 'ISS')) {
+      } else if (acimaSublimite && (nome === 'ICMS' || nome === 'ISS' || nome === 'IBS')) {
         item.noDas = false;
         item.motivo = 'sublimite';
       }
@@ -103,14 +141,15 @@
 
   /*
    * entrada = {
-   *   rbt12, folha12,
+   *   rbt12, folha12, ano (do período de apuração; sem ano = tabelas atuais da LC 123),
    *   receitas: [{ anexo: 'I'|'II'|'III'|'IV'|'V'|'FR', tratamento, valor, rotulo }]
    * }
    */
   function apurar(entrada) {
     var rbt12 = entrada.rbt12;
+    var ano = entrada.ano;
     var alertas = [];
-    var res = { rbt12: rbt12, folha12: entrada.folha12, linhas: [], alertas: alertas, fatorR: null };
+    var res = { rbt12: rbt12, folha12: entrada.folha12, ano: ano, reforma: ano >= PRIMEIRO_ANO_REFORMA, linhas: [], alertas: alertas, fatorR: null };
 
     if (rbt12 > T.LIMITE_SIMPLES) {
       res.erro = 'A receita bruta dos últimos 12 meses ultrapassa o limite de R$ 4.800.000,00 do Simples Nacional. A empresa está sujeita à exclusão do regime.';
@@ -128,7 +167,7 @@
 
     entrada.receitas.forEach(function (r) {
       var anexoKey = r.anexo === 'FR' ? res.fatorR.anexo : r.anexo;
-      var c = calcularReceita(anexoKey, r.valor, r.tratamento, rbt12);
+      var c = calcularReceita(anexoKey, r.valor, r.tratamento, rbt12, ano);
       if (!c) return;
       c.rotulo = r.rotulo || '';
       c.viaFatorR = r.anexo === 'FR';
@@ -156,8 +195,16 @@
     res.porTributo = porTributo;
     res.faixa = faixaIndex(rbt12) + 1;
 
+    if (res.reforma) {
+      alertas.push('Período de ' + ano + ': tabelas da LC 214/2025 (Reforma Tributária). PIS e COFINS foram substituídos pela CBS' +
+        (ano >= 2029 ? ', e o IBS substitui gradualmente o ICMS e o ISS' : ', e o IBS entra com parcela mínima') +
+        '. Para avaliar o recolhimento de IBS/CBS por fora do DAS, use o comparativo de regimes.');
+      if (res.linhas.some(function (l) { return l.anexo === 'II'; })) {
+        alertas.push('A partir de 2027, o Anexo II vale só para produtos com IPI mantido (industrializados na Zona Franca de Manaus); as demais vendas de mercadorias industrializadas pelo contribuinte vão para o Anexo I (LC 123, art. 18, § 4º, I e II).');
+      }
+    }
     if (rbt12 > T.SUBLIMITE_ICMS_ISS) {
-      alertas.push('RBT12 acima do sublimite de R$ 3.600.000,00: ICMS e ISS devem ser recolhidos fora do DAS, pelas regras normais do estado/município, e não estão incluídos neste total.');
+      alertas.push('RBT12 acima do sublimite de R$ 3.600.000,00: ICMS e ISS' + (res.reforma ? ' (e o IBS)' : '') + ' devem ser recolhidos fora do DAS, pelas regras normais, e não estão incluídos neste total.');
     }
     if (res.linhas.some(function (l) { return l.anexo === 'IV'; })) {
       alertas.push('Anexo IV: a Contribuição Previdenciária Patronal (CPP, 20% + RAT sobre a folha) não está no DAS e é recolhida à parte via DCTFWeb.');
@@ -170,8 +217,8 @@
       var baseFR = entrada.receitas.filter(function (r) { return r.anexo === 'FR'; });
       var somaIII = 0, somaV = 0;
       baseFR.forEach(function (r) {
-        var a = calcularReceita('III', r.valor, r.tratamento, rbt12);
-        var b = calcularReceita('V', r.valor, r.tratamento, rbt12);
+        var a = calcularReceita('III', r.valor, r.tratamento, rbt12, ano);
+        var b = calcularReceita('V', r.valor, r.tratamento, rbt12, ano);
         if (a) somaIII += a.das;
         if (b) somaV += b.das;
       });
@@ -184,6 +231,7 @@
 
   root.RC2_CALCULO = {
     arred: arred,
+    anexoDoAno: anexoDoAno,
     faixaIndex: faixaIndex,
     aliquotaEfetiva: aliquotaEfetiva,
     percentuaisTributos: percentuaisTributos,

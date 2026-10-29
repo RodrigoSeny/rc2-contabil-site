@@ -5,16 +5,24 @@ e [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [1.2.0] - 2026-10-29
+
 ### Adicionado
 - Comparativo de regimes na Reforma Tributária (`/calculadora-simples/comparar.html`):
   Simples (tudo no DAS), Simples com IBS/CBS por fora, Lucro Presumido e Lucro
   Real, de 2027 a 2033, com recomendação que considera o crédito de IBS/CBS
   aproveitado pelos clientes empresas. Tabelas dos Anexos I a V extraídas da
   LC 214/2025 (redação da LC 227/2026); premissas da CBS/IBS editáveis.
-- Testes do comparativo (`node --test test/regimes.test.js`) e ferramenta de
-  extração das tabelas da lei (`ferramentas/lc214/`).
+- Testes (`node --test test/calculo.test.js test/regimes.test.js`) e ferramenta
+  de extração das tabelas da lei (`ferramentas/lc214/`).
 
 ### Alterado
+- Calculadora do DAS: o ano do período de apuração escolhe as tabelas — até 2026
+  as da LC 123/2006; a partir de 2027 as da LC 214/2025 (CBS e IBS no lugar de
+  PIS/COFINS, IBS substituindo o ICMS/ISS de 2029 a 2033, 6ª faixa com 0,1 ponto
+  a menos em 2027–2028). Monofásico e exportação passam a excluir CBS/IBS; acima
+  do sublimite o IBS também sai do DAS; aviso sobre o Anexo II (só IPI mantido).
+- Tabelas informativas mostram as alíquotas até 2026, 2027–2028 e de 2029 em diante.
 - Calculadora: terceira aba com link para o comparativo.
 
 ## [1.1.0] - 2026-09-30

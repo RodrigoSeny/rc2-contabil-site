@@ -14,7 +14,7 @@
   };
   var TIMEOUT_MS = 12000;
   var INTERVALO_CONSULTAS_MS = 5000;
-  var ORDEM_TRIBUTOS = ['IRPJ', 'CSLL', 'COFINS', 'PIS', 'CPP', 'IPI', 'ICMS', 'ISS'];
+  var ORDEM_TRIBUTOS = ['IRPJ', 'CSLL', 'COFINS', 'PIS', 'CBS', 'IBS', 'CPP', 'IPI', 'ICMS', 'ISS'];
   var OPCOES_ANEXO = [
     ['', 'Selecione…'],
     ['I', 'Anexo I — Comércio'],
@@ -522,7 +522,7 @@
 
     if (mostrarErros($('#form-erros'), erros)) return;
 
-    var res = C.apurar({ rbt12: rbt12, folha12: folha12, receitas: receitas });
+    var res = C.apurar({ rbt12: rbt12, folha12: folha12, ano: anoApuracao(), receitas: receitas });
     if (res.fatorR && !folhaInformada) {
       res.alertas.unshift('Folha de salários não informada: o Fator R foi considerado 0% e as receitas sujeitas a ele foram tributadas no Anexo V.');
     }
@@ -568,6 +568,7 @@
     var res = C.apurar({
       rbt12: rbt12,
       folha12: folha12,
+      ano: anoApuracao(),
       receitas: [{ anexo: a.anexo, tratamento: 'normal', valor: fat, rotulo: formatarCNAE(a.cnae.codigo) + ' — ' + txt(a.cnae.descricao, 60) }]
     });
     if (res.fatorR && !f) {
@@ -602,6 +603,12 @@
   function rotuloFaixa(i) {
     var ate = T.LIMITES[i];
     return i === 0 ? 'até ' + moeda(ate) : 'de ' + moeda(T.LIMITES[i - 1] + 0.01) + ' a ' + moeda(ate);
+  }
+
+  /* Ano do período de apuração (define as tabelas: LC 123 até 2026, LC 214 a partir de 2027). */
+  function anoApuracao() {
+    var m = /^(\d{4})-\d{2}$/.exec($('#periodo').value);
+    return m ? Number(m[1]) : new Date().getFullYear();
   }
 
   function periodoInfo() {
@@ -709,7 +716,7 @@
       h('button', { class: 'btn btn--primary', type: 'button', text: 'Imprimir / salvar PDF', onclick: function () { window.print(); } }),
       h('a', { class: 'btn btn--secondary', href: 'https://wa.me/5521973839229?text=' + encodeURIComponent('Olá, fiz uma simulação na calculadora do Simples Nacional (DAS estimado de ' + moeda(res.totalDas) + ') e gostaria de falar com um contador.'), target: '_blank', rel: 'noopener noreferrer', text: 'Falar no WhatsApp' })
     ));
-    corpo.appendChild(h('p', { class: 'disclaimer-mini', text: 'Estimativa ilustrativa baseada nas tabelas da LC 123/2006 (revisão ' + T.REVISAO + ') e nos dados informados. Não substitui a apuração oficial no PGDAS-D nem a orientação de um contador.' }));
+    corpo.appendChild(h('p', { class: 'disclaimer-mini', text: 'Estimativa ilustrativa baseada nas tabelas da ' + (res.reforma ? 'LC 123/2006 na redação da LC 214/2025' : 'LC 123/2006') + ' (revisão ' + T.REVISAO + ') e nos dados informados. Não substitui a apuração oficial no PGDAS-D nem a orientação de um contador.' }));
 
     rolarParaResultado();
   }
@@ -740,19 +747,25 @@
   /* ---------------- Tabelas informativas ---------------- */
   function renderTabelas() {
     var wrap = $('#tabelas-anexos');
+    // Alíquotas nominais por período: as faixas e os valores a deduzir não mudam com a reforma;
+    // só a 6ª faixa tem 0,1 ponto a menos em 2027–2028 (desconto da CBS).
+    var periodos = [['até 2026', 2026], ['2027–2028', 2027], ['2029 em diante', 2029]];
     Object.keys(T.ANEXOS).forEach(function (k) {
       var a = T.ANEXOS[k];
+      var porPeriodo = periodos.map(function (p) { return C.anexoDoAno(k, p[1]); });
       var tb = h('tbody');
       a.faixas.forEach(function (f, i) {
         tb.appendChild(h('tr', null,
           h('td', { text: (i + 1) + 'ª' }),
           h('td', { text: rotuloFaixa(i) }),
-          h('td', { class: 'num', text: pct(f.aliq, 2) }),
+          porPeriodo.map(function (an) { return h('td', { class: 'num', text: pct(an.faixas[i].aliq, 2) }); }),
           h('td', { class: 'num', text: moeda(f.pd) })));
       });
       wrap.appendChild(h('div', null, h('h3', { text: a.nome }),
         h('div', { class: 'table-wrap' }, h('table', null,
-          h('thead', null, h('tr', null, h('th', { text: 'Faixa' }), h('th', { text: 'Receita bruta em 12 meses' }), h('th', { class: 'num', text: 'Alíquota' }), h('th', { class: 'num', text: 'Valor a deduzir' }))),
+          h('thead', null, h('tr', null, h('th', { text: 'Faixa' }), h('th', { text: 'Receita bruta em 12 meses' }),
+            periodos.map(function (p) { return h('th', { class: 'num', text: 'Alíquota ' + p[0] }); }),
+            h('th', { class: 'num', text: 'Valor a deduzir' }))),
           tb))));
     });
   }
