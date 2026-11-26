@@ -5,6 +5,24 @@ e [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [1.3.0] - 2026-11-25
+
+### Adicionado
+- Quadro do MEI: escolha do ano de referência (2026, 2027, 2028) e opção de
+  alterar manualmente o salário mínimo e o percentual do INSS para simular o
+  DAS-MEI, com botão para restaurar os valores de referência.
+
+### Alterado
+- MEI conforme a LC 238/2026: limite anual de R$ 81 mil (2026), R$ 110 mil
+  (2027) e R$ 140 mil (2028 em diante); até 2 empregados a partir de 2027.
+- Salário mínimo de 2027 com a previsão do PLOA (R$ 1.741), marcado como
+  estimativa até o decreto oficial.
+- Valores do MEI e cálculo do DAS-MEI em centavos inteiros.
+- Campos de valor formatados ao sair do campo: dinheiro como "R$ 1.234,56" e
+  percentuais como "5,00%" (calculadora e comparativo), inclusive os valores
+  iniciais das premissas.
+- Scripts com `?v=1.3.0` para o navegador não usar JS antigo em cache.
+
 ## [1.2.1] - 2026-10-29
 
 ### Corrigido

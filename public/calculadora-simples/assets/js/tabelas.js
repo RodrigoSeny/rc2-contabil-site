@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  var REVISAO = 'outubro/2026';
+  var REVISAO = 'novembro/2026';
 
   var LIMITES = [180000, 360000, 720000, 1800000, 3600000, 4800000];
   var SUBLIMITE_ICMS_ISS = 3600000;
@@ -118,14 +118,25 @@
     exportacao:   { rotulo: 'Exportação', exclui: ['PIS', 'COFINS', 'ICMS', 'IPI', 'ISS'], anexos: ['I', 'II', 'III', 'IV', 'V'] }
   };
 
-  /* MEI — valores de referência (LC 123/2006, art. 18-A). */
+  /*
+   * MEI — valores de referência (LC 123/2006, art. 18-A, na redação da LC 238/2026).
+   * Dinheiro em CENTAVOS inteiros; percentual em centésimos de ponto (5% = 500).
+   * DAS-MEI = 5% do salário mínimo (INSS) + R$ 1,00 de ICMS e/ou R$ 5,00 de ISS.
+   * LC 238/2026 (21/10/2026): limite anual de R$ 81 mil → R$ 110 mil em 2027 e R$ 140 mil a partir
+   * de 2028 (aumento condicionado à previsão da renúncia nas leis orçamentárias); até 2 empregados
+   * a partir de 2027.
+   * Salário mínimo: 2026 oficial (R$ 1.621). 2027 = PREVISÃO do PLOA 2027 (R$ 1.741) — trocar pelo
+   * valor do decreto quando sair o INPC de novembro (dezembro/2026). 2028 repete 2027 até haver previsão.
+   */
   var MEI = {
-    ano: 2026,
-    salarioMinimo: 1621.00,
-    percentualInss: 0.05,
-    icms: 1.00,
-    iss: 5.00,
-    limiteAnual: 81000
+    percentualInss: 500,
+    icms: 100,
+    iss: 500,
+    anos: {
+      2026: { salarioMinimo: 162100, salarioOficial: true, limiteAnual: 8100000, empregados: 1 },
+      2027: { salarioMinimo: 174100, salarioOficial: false, limiteAnual: 11000000, empregados: 2 },
+      2028: { salarioMinimo: 174100, salarioOficial: false, limiteAnual: 14000000, empregados: 2 }
+    }
   };
 
   /*

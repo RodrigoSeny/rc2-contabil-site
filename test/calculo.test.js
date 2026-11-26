@@ -60,3 +60,32 @@ test('anexoDoAno: faixas e deduções iguais; muda só a 6ª faixa em 2027', () 
   perto(a27.faixas[5].aliq, 0.304, 1e-9);
   perto(a26.faixas[2].aliq, a27.faixas[2].aliq, 1e-9);
 });
+
+test('texto digitado vira centésimos inteiros, sem float', () => {
+  assert.equal(C.textoParaCentesimos('1.741,00'), 174100);
+  assert.equal(C.textoParaCentesimos('1741'), 174100);
+  assert.equal(C.textoParaCentesimos('R$ 1.621,5'), 162150);
+  assert.equal(C.textoParaCentesimos('5'), 500);
+  assert.equal(C.textoParaCentesimos('5,5%'), 550);
+  assert.equal(C.textoParaCentesimos('0,1'), 10);
+  for (const ruim of ['', 'abc', '1,234', '-5', '12a']) assert.ok(Number.isNaN(C.textoParaCentesimos(ruim)), ruim);
+});
+
+test('MEI por ano (LC 238/2026): limite 81 mil → 110 mil (2027) → 140 mil (2028+)', () => {
+  assert.equal(C.meiDoAno(2026).limiteAnual, 8100000);
+  assert.equal(C.meiDoAno(2026).salarioOficial, true);
+  assert.equal(C.meiDoAno(2027).limiteAnual, 11000000);
+  assert.equal(C.meiDoAno(2027).empregados, 2);
+  assert.equal(C.meiDoAno(2028).limiteAnual, 14000000);
+  assert.equal(C.meiDoAno(2030).limiteAnual, 14000000);
+  assert.equal(C.meiDoAno(2020).limiteAnual, 8100000);
+});
+
+test('DAS-MEI em centavos', () => {
+  const d26 = C.dasMei(162100, 500, 100, 500);
+  assert.deepEqual(d26, { inss: 8105, comercio: 8205, servicos: 8605, ambos: 8705 });
+  const d27 = C.dasMei(174100, 500, 100, 500);
+  assert.equal(d27.inss, 8705);
+  assert.equal(C.dasMei(100001, 500, 0, 0).inss, 5000); // 50,0005 → 50,00
+  assert.equal(C.dasMei(100010, 500, 0, 0).inss, 5001); // 50,005 → 50,01 (meio para cima)
+});

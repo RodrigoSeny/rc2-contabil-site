@@ -361,19 +361,124 @@
     box.hidden = false;
   }
 
+  /* Valores em centavos / centésimos de ponto (inteiros) → texto. */
+  function centavosBR(c) { return moeda(c / 100); }
+  function centesimosBR(c) {
+    return (c / 100).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+  function centesimosPct(c) {
+    return (c / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+  }
+
   function renderMEI() {
-    var M = T.MEI;
-    var inss = C.arred(M.salarioMinimo * M.percentualInss);
+    var anos = Object.keys(T.MEI.anos).map(Number).sort(function (a, b) { return a - b; });
+    var anoAtual = new Date().getFullYear();
+    var anoInicial = anos.indexOf(anoAtual) >= 0 ? anoAtual : anos[anoAtual < anos[0] ? 0 : anos.length - 1];
+    var M = C.meiDoAno(anoInicial);
+
+    var selAno = h('select', { class: 'input', id: 'mei-ano' });
+    anos.forEach(function (a) { selAno.appendChild(h('option', { value: String(a), text: String(a) })); });
+    selAno.value = String(anoInicial);
+
+    var intro = h('p');
+    var regras = h('p', { class: 'hint' });
+    var celComercio = h('td', { class: 'num' });
+    var celServicos = h('td', { class: 'num' });
+    var celAmbos = h('td', { class: 'num' });
     var tb = h('tbody', null,
-      h('tr', null, h('td', { text: 'Comércio ou indústria' }), h('td', { class: 'num', text: moeda(inss + M.icms) })),
-      h('tr', null, h('td', { text: 'Prestação de serviços' }), h('td', { class: 'num', text: moeda(inss + M.iss) })),
-      h('tr', null, h('td', { text: 'Comércio e serviços' }), h('td', { class: 'num', text: moeda(inss + M.icms + M.iss) }))
+      h('tr', null, h('td', { text: 'Comércio ou indústria' }), celComercio),
+      h('tr', null, h('td', { text: 'Prestação de serviços' }), celServicos),
+      h('tr', null, h('td', { text: 'Comércio e serviços' }), celAmbos)
     );
+
+    var inSalario = h('input', { class: 'input money', id: 'mei-salario', type: 'text', inputmode: 'decimal', 'aria-describedby': 'mei-salario-hint' });
+    var inPercentual = h('input', { class: 'input money', id: 'mei-percentual', type: 'text', inputmode: 'decimal', 'aria-describedby': 'mei-percentual-hint' });
+    var hintSalario = h('p', { class: 'hint', id: 'mei-salario-hint' });
+    var hintPercentual = h('p', { class: 'hint', id: 'mei-percentual-hint' });
+    var btnRestaurar = h('button', { class: 'btn btn--link', type: 'button', text: 'Restaurar valores de referência' });
+
+    function textoSalarioRef() {
+      return (M.salarioOficial ? 'Oficial para ' : 'Previsão (PLOA) para ') + M.ano + ': ' + centavosBR(M.salarioMinimo) + '.';
+    }
+    function textoPercentualRef() { return 'Regra geral: ' + centesimosBR(M.percentualInss) + '% do salário mínimo.'; }
+
+    function validar(input, hint, valor, textoOk, max) {
+      var ok = !isNaN(valor) && valor > 0 && (!max || valor <= max);
+      if (ok) { input.removeAttribute('aria-invalid'); hint.textContent = textoOk; }
+      else { input.setAttribute('aria-invalid', 'true'); hint.textContent = max ? 'Informe um percentual maior que 0 e até 100.' : 'Informe um valor válido, ex.: 1.741,00.'; }
+      return ok;
+    }
+
+    function restaurar() {
+      inSalario.value = centavosBR(M.salarioMinimo);
+      inPercentual.value = centesimosPct(M.percentualInss);
+    }
+    function formatarAoSair(input, formatar) {
+      input.addEventListener('blur', function () {
+        var v = C.textoParaCentesimos(input.value);
+        if (!isNaN(v) && v > 0) input.value = formatar(v);
+      });
+    }
+    formatarAoSair(inSalario, centavosBR);
+    formatarAoSair(inPercentual, centesimosPct);
+
+    function atualizar() {
+      var sal = C.textoParaCentesimos(inSalario.value);
+      var per = C.textoParaCentesimos(inPercentual.value);
+      var okSal = validar(inSalario, hintSalario, sal, textoSalarioRef());
+      var okPer = validar(inPercentual, hintPercentual, per, textoPercentualRef(), 10000);
+      if (!okSal) sal = M.salarioMinimo;
+      if (!okPer) per = M.percentualInss;
+      var alterado = sal !== M.salarioMinimo || per !== M.percentualInss;
+      var d = C.dasMei(sal, per, M.icms, M.iss);
+      celComercio.textContent = centavosBR(d.comercio);
+      celServicos.textContent = centavosBR(d.servicos);
+      celAmbos.textContent = centavosBR(d.ambos);
+      var base = centesimosBR(per) + '% do salário mínimo de ' + centavosBR(sal) + ' + ICMS/ISS';
+      intro.textContent = 'O MEI recolhe um valor fixo mensal (DAS-MEI), independente do faturamento, desde que a receita bruta anual não ultrapasse ' +
+        centavosBR(M.limiteAnual) + ' em ' + M.ano + '. ' +
+        (alterado
+          ? 'Valores SIMULADOS com os dados informados por você (' + base + '):'
+          : M.salarioOficial
+            ? 'Valores de referência para ' + M.ano + ' (' + base + '):'
+            : 'Valores ESTIMADOS para ' + M.ano + ' (' + base + ' — salário mínimo ainda não oficial):');
+      regras.textContent = M.ano >= 2027
+        ? 'Regras da LC 238/2026 para ' + M.ano + ': limite de ' + centavosBR(M.limiteAnual) + ' por ano e até ' + M.empregados +
+          ' empregados (recebendo 1 salário mínimo ou o piso da categoria). O aumento do limite depende da previsão no orçamento federal e de regulamentação do Comitê Gestor do Simples Nacional. Quem passou de R$ 81 mil em 2026 não volta automaticamente ao MEI.'
+        : 'Em 2026 o limite continua em R$ 81.000,00 e o MEI pode ter 1 empregado. A LC 238/2026 eleva o limite para R$ 110 mil em 2027 e R$ 140 mil a partir de 2028 — escolha o ano acima para ver.';
+      btnRestaurar.hidden = !alterado && okSal && okPer;
+    }
+
+    selAno.addEventListener('change', function () {
+      M = C.meiDoAno(Number(selAno.value));
+      restaurar();
+      atualizar();
+    });
+    inSalario.addEventListener('input', atualizar);
+    inPercentual.addEventListener('input', atualizar);
+    btnRestaurar.addEventListener('click', function () { restaurar(); atualizar(); });
+
+    var ajuste = h('details', { class: 'acc premissas' },
+      h('summary', { text: 'Alterar salário mínimo ou percentual manualmente' }),
+      h('div', { class: 'stack' },
+        h('div', { class: 'grid-2' },
+          h('div', { class: 'field' }, h('label', { class: 'label', for: 'mei-salario', text: 'Salário mínimo (R$)' }), inSalario, hintSalario),
+          h('div', { class: 'field' }, h('label', { class: 'label', for: 'mei-percentual', text: 'Percentual do INSS (%)' }), inPercentual, hintPercentual)
+        ),
+        h('p', { class: 'hint', text: 'Use para simular um salário mínimo diferente (por exemplo, quando o valor oficial do ano seguinte for divulgado) ou outro percentual. ICMS (R$ 1,00) e ISS (R$ 5,00) são fixos.' }),
+        btnRestaurar
+      ));
+
+    restaurar();
+    atualizar();
     return h('div', { class: 'notice notice--info' },
       h('div', { class: 'stack' },
         h('strong', { text: 'Esta empresa consta como MEI.' }),
-        h('p', { text: 'O MEI recolhe um valor fixo mensal (DAS-MEI), independente do faturamento, desde que a receita anual não ultrapasse ' + moeda(M.limiteAnual) + '. Valores de referência para ' + M.ano + ' (5% do salário mínimo de ' + moeda(M.salarioMinimo) + ' + ICMS/ISS):' }),
+        h('div', { class: 'field' }, h('label', { class: 'label', for: 'mei-ano', text: 'Ano de referência' }), selAno),
+        intro,
         h('div', { class: 'table-wrap' }, h('table', null, h('thead', null, h('tr', null, h('th', { text: 'Atividade' }), h('th', { class: 'num', text: 'DAS-MEI/mês' }))), tb)),
+        regras,
+        ajuste,
         h('p', { text: 'A calculadora abaixo mostra quanto a empresa pagaria como ME/EPP no Simples Nacional, útil para comparar caso o limite do MEI seja ultrapassado.' })
       ));
   }
@@ -403,7 +508,7 @@
     OPCOES_ANEXO.forEach(function (o) { selAnexo.appendChild(h('option', { value: o[0], text: o[1] })); });
 
     var selTrat = h('select', { class: 'input', id: 'trat-' + id });
-    var valor = h('input', { class: 'input money', id: 'valor-' + id, type: 'text', inputmode: 'decimal', placeholder: '0,00' });
+    var valor = h('input', { class: 'input money', id: 'valor-' + id, type: 'text', inputmode: 'decimal', placeholder: 'R$ 0,00' });
     var obs = h('p', { class: 'linha__obs', 'aria-live': 'polite' });
     var btnRem = h('button', { class: 'btn btn--icon', type: 'button', 'aria-label': 'Remover atividade', title: 'Remover atividade', text: '×' });
 
@@ -452,7 +557,7 @@
   function formatarCampoMoeda(ev) {
     var el = ev.target;
     var v = parseMoeda(el.value);
-    if (!isNaN(v)) el.value = numeroBR(v);
+    if (!isNaN(v)) el.value = moeda(v);
   }
 
   /* ---------------- Modo (início de atividade) ---------------- */

@@ -15,9 +15,9 @@
   <meta property="og:image" content="assets/img/logo-rc2.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="stylesheet" href="assets/css/style.css">
-  <script src="assets/js/reforma.js" defer></script>
-  <script src="assets/js/regimes.js" defer></script>
-  <script src="assets/js/comparar.js" defer></script>
+  <script src="assets/js/reforma.js?v=1.3.0" defer></script>
+  <script src="assets/js/regimes.js?v=1.3.0" defer></script>
+  <script src="assets/js/comparar.js?v=1.3.0" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#comparador">Ir para o comparativo</a>
@@ -120,7 +120,7 @@
           </div>
           <div class="field">
             <label class="label" for="c-receita">Receita bruta anual</label>
-            <input id="c-receita" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            <input id="c-receita" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
           </div>
           <div class="field">
             <label class="label" for="c-rbt12">RBT12 — receita dos 12 meses anteriores</label>
@@ -129,12 +129,12 @@
           </div>
           <div class="field">
             <label class="label" for="c-folha">Folha anual (salários e pró-labore)</label>
-            <input id="c-folha" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            <input id="c-folha" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
             <p class="hint">Usada no Fator R e nos encargos sobre a folha.</p>
           </div>
           <div class="field">
             <label class="label" for="c-b2b">Vendas para outras empresas (%)</label>
-            <input id="c-b2b" class="input money" type="text" inputmode="decimal" placeholder="0" value="0">
+            <input id="c-b2b" class="input money" type="text" inputmode="decimal" placeholder="0,00%" value="0">
             <p class="hint">Parte das vendas para empresas que aproveitam crédito de IBS/CBS.</p>
           </div>
         </div>
@@ -151,12 +151,12 @@
         <div class="grid-3">
           <div class="field">
             <label class="label" for="c-compras">Compras e despesas anuais de fornecedores do regime regular</label>
-            <input id="c-compras" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            <input id="c-compras" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
             <p class="hint">Mercadorias, insumos, aluguel, energia, serviços… de empresas fora do Simples.</p>
           </div>
           <div class="field">
             <label class="label" for="c-compras-sn">Compras anuais de fornecedores do Simples</label>
-            <input id="c-compras-sn" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+            <input id="c-compras-sn" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
             <p class="hint">Geram crédito menor: só o IBS/CBS pago no DAS do fornecedor.</p>
           </div>
           <div class="field">

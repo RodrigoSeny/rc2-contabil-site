@@ -40,7 +40,8 @@
     casas = casas === undefined ? 2 : casas;
     return (v * 100).toLocaleString('pt-BR', { minimumFractionDigits: casas, maximumFractionDigits: casas }) + '%';
   }
-  function numBR(v) { return String(v).replace('.', ','); }
+  /* Percentual já em pontos (11.3 → "11,30%"). */
+  function numBR(v) { return Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%'; }
 
   function parseNumero(str) {
     var s = String(str || '').trim().replace(/[R$%\s]/g, '');
@@ -60,6 +61,17 @@
     ['#p-cbs', 'CBS de referência'], ['#p-ibs', 'IBS pleno'], ['#p-cred-sn', 'Crédito médio em compras do Simples'],
     ['#p-inss', 'INSS patronal + RAT'], ['#p-terceiros', 'Terceiros']
   ];
+
+  /* Campos de valor: percentuais (lista acima) viram "5,00%"; os demais, "R$ 1.234,56". */
+  function ehPercentual(el) {
+    return PERCENTUAIS.some(function (par) { return par[0] === '#' + el.id; });
+  }
+  function formatarCampo(el) {
+    var v = parseNumero(el.value);
+    if (!String(el.value).trim() || isNaN(v)) return;
+    el.value = ehPercentual(el) ? numBR(v) : moeda(v);
+  }
+  function formatarTodos() { $all('#form-comparar .money').forEach(formatarCampo); }
 
   function tipoDoAnexo(anexo) { return anexo === 'I' || anexo === 'II' ? 'comercio' : 'servico'; }
 
@@ -267,6 +279,10 @@
     R.ANOS.forEach(function (ano) { append(sel, h('option', { value: ano, text: String(ano) })); });
     preencherPremissas();
     ajustarAtividade();
+    formatarTodos();
+    $all('#form-comparar .money').forEach(function (el) {
+      el.addEventListener('blur', function () { formatarCampo(el); });
+    });
     $('#c-revisao').textContent = R.REVISAO;
     $('#ano').textContent = String(new Date().getFullYear());
 
@@ -282,6 +298,7 @@
       $('#form-comparar').reset();
       preencherPremissas();
       ajustarAtividade();
+      formatarTodos();
       mostrarErros([]);
       $('#c-resultado').hidden = true;
     });

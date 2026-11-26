@@ -15,10 +15,10 @@
   <meta property="og:image" content="assets/img/logo-rc2.png">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="stylesheet" href="assets/css/style.css">
-  <script src="assets/js/tabelas.js" defer></script>
-  <script src="assets/js/reforma.js" defer></script>
-  <script src="assets/js/calculo.js" defer></script>
-  <script src="assets/js/app.js" defer></script>
+  <script src="assets/js/tabelas.js?v=1.3.0" defer></script>
+  <script src="assets/js/reforma.js?v=1.3.0" defer></script>
+  <script src="assets/js/calculo.js?v=1.3.0" defer></script>
+  <script src="assets/js/app.js?v=1.3.0" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#calculadora">Ir para a calculadora</a>
@@ -130,17 +130,17 @@
           <div class="grid-3">
             <div class="field">
               <label class="label" for="rbt12-s">Receita bruta dos últimos 12 meses (RBT12)</label>
-              <input id="rbt12-s" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <input id="rbt12-s" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
               <p class="hint">Soma do faturamento dos 12 meses anteriores ao mês calculado.</p>
             </div>
             <div class="field">
               <label class="label" for="fat-s">Faturamento do mês</label>
-              <input id="fat-s" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <input id="fat-s" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
               <p class="hint">Receita do mês que você quer calcular.</p>
             </div>
             <div class="field">
               <label class="label" for="folha-s">Folha de pagamento dos últimos 12 meses</label>
-              <input id="folha-s" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <input id="folha-s" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
               <p class="hint">Salários, pró-labore e encargos. Usada no Fator R.</p>
             </div>
           </div>
@@ -184,12 +184,12 @@
           <div id="bloco-normal" class="grid-2">
             <div class="field">
               <label class="label" for="rbt12">Receita bruta dos últimos 12 meses (RBT12)</label>
-              <input id="rbt12" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <input id="rbt12" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
               <p class="hint">Soma do faturamento dos 12 meses anteriores ao período de apuração.</p>
             </div>
             <div class="field">
               <label class="label" for="folha12">Folha de salários dos últimos 12 meses</label>
-              <input id="folha12" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <input id="folha12" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
               <p class="hint">Salários, pró-labore, 13º, férias, INSS patronal e FGTS. Usada no Fator R.</p>
             </div>
           </div>
@@ -202,11 +202,11 @@
             </div>
             <div class="field">
               <label class="label" for="receita-acum">Receita acumulada nesses meses</label>
-              <input id="receita-acum" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <input id="receita-acum" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
             </div>
             <div class="field">
               <label class="label" for="folha-acum" id="label-folha-acum">Folha acumulada nesses meses</label>
-              <input id="folha-acum" class="input money" type="text" inputmode="decimal" placeholder="0,00">
+              <input id="folha-acum" class="input money" type="text" inputmode="decimal" placeholder="R$ 0,00">
             </div>
             <p class="hint span-all">Em início de atividade, o RBT12 é proporcionalizado: média mensal × 12 (no 1º mês, receita do próprio mês × 12).</p>
           </div>

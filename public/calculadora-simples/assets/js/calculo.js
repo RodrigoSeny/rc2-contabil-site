@@ -229,7 +229,55 @@
     return res;
   }
 
+  /*
+   * Texto digitado ("1.741", "1.741,00", "R$ 1741,5", "5,5%") → inteiro em centésimos
+   * (centavos para dinheiro, centésimos de ponto para percentual), sem passar por float.
+   * Aceita até 2 casas decimais. Inválido → NaN.
+   */
+  function textoParaCentesimos(str) {
+    var s = String(str === undefined || str === null ? '' : str).trim().replace(/[R$%\s]/g, '');
+    if (!s) return NaN;
+    if (s.indexOf(',') >= 0) s = s.replace(/\./g, '').replace(',', '.');
+    else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+    var m = /^(\d{1,10})(?:\.(\d{1,2}))?$/.exec(s);
+    if (!m) return NaN;
+    var dec = m[2] || '';
+    while (dec.length < 2) dec += '0';
+    return Number(m[1]) * 100 + Number(dec);
+  }
+
+  /* Parâmetros do MEI no ano (anos fora da tabela usam o mais próximo). */
+  function meiDoAno(ano) {
+    var anos = Object.keys(T.MEI.anos).map(Number).sort(function (a, b) { return a - b; });
+    var escolhido = anos[0];
+    anos.forEach(function (a) { if (a <= ano) escolhido = a; });
+    var p = T.MEI.anos[escolhido];
+    return {
+      ano: ano, salarioMinimo: p.salarioMinimo, salarioOficial: p.salarioOficial,
+      limiteAnual: p.limiteAnual, empregados: p.empregados,
+      percentualInss: T.MEI.percentualInss, icms: T.MEI.icms, iss: T.MEI.iss
+    };
+  }
+
+  /*
+   * DAS-MEI mensal em centavos: percentual do salário mínimo (INSS) + ICMS e/ou ISS fixos.
+   * salarioCentavos, icms e iss em centavos; percentualCentesimos em centésimos de ponto (5% = 500).
+   * INSS arredondado meio-centavo para cima, só com inteiros.
+   */
+  function dasMei(salarioCentavos, percentualCentesimos, icmsCentavos, issCentavos) {
+    var inss = Math.floor((salarioCentavos * percentualCentesimos + 5000) / 10000);
+    return {
+      inss: inss,
+      comercio: inss + icmsCentavos,
+      servicos: inss + issCentavos,
+      ambos: inss + icmsCentavos + issCentavos
+    };
+  }
+
   root.RC2_CALCULO = {
+    textoParaCentesimos: textoParaCentesimos,
+    meiDoAno: meiDoAno,
+    dasMei: dasMei,
     arred: arred,
     anexoDoAno: anexoDoAno,
     faixaIndex: faixaIndex,
