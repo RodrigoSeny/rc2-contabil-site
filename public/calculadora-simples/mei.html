@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ainda vale a pena ser MEI? | RC2 Contábil</title>
+  <meta name="description" content="Responda duas perguntas e veja, em linguagem simples, quanto você paga como MEI e quanto pagaria como microempresa no Simples Nacional, conforme o faturamento cresce. Simulação gratuita — RC2 Contábil.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#062F66">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Ainda vale a pena ser MEI? | RC2 Contábil">
+  <meta property="og:description" content="Quanto você paga como MEI e quanto pagaria como microempresa — resposta simples, com os cálculos para quem quiser ver.">
+  <meta property="og:image" content="assets/img/logo-rc2.png">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="assets/css/style.css?v=1.4.0">
+  <script src="assets/js/tabelas.js?v=1.4.0" defer></script>
+  <script src="assets/js/reforma.js?v=1.4.0" defer></script>
+  <script src="assets/js/calculo.js?v=1.4.0" defer></script>
+  <script src="assets/js/mei.js?v=1.4.0" defer></script>
+  <script src="assets/js/mei-app.js?v=1.4.0" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#mei">Ir para as perguntas</a>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="./" aria-label="RC2 Contábil — início">
+        <img src="assets/img/logo-rc2.png" alt="Logo RC2 Contábil" width="52" height="52">
+        <span class="brand__text">
+          <strong>RC2 Contábil</strong>
+          <small>Contabilidade para empresas</small>
+        </span>
+      </a>
+      <nav class="topbar__nav" aria-label="Navegação principal">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#avisos">Avisos legais</a>
+        <a class="btn btn--ghost-light" href="https://wa.me/5521973839229?text=Ol%C3%A1%2C%20usei%20a%20calculadora%20MEI%20ou%20empresa%20e%20gostaria%20de%20falar%20com%20um%20contador." target="_blank" rel="noopener noreferrer">Fale com um contador</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero__inner">
+      <div>
+        <p class="eyebrow">MEI · resposta rápida</p>
+        <h1>Ainda vale a pena ser MEI?</h1>
+        <p class="hero__lead">Responda duas perguntas e veja quanto você paga como MEI e quanto pagaria se virasse microempresa. Sem termos técnicos, e com os cálculos para quem quiser conferir.</p>
+        <ul class="hero__badges">
+          <li>Limites de 2026 a 2028</li>
+          <li>Sem cadastro</li>
+          <li>Nenhum dado armazenado</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="notice notice--warning" role="note">
+      <svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20.5h20L12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.2" fill="currentColor"/></svg>
+      <div>
+        <strong>Estimativa para ajudar a decidir — não é orientação contábil.</strong>
+        Os valores são aproximados e consideram faturamento parecido todos os meses. Antes de mudar de MEI para empresa, converse com um contador.
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <nav class="modos modos--4" aria-label="Ferramentas">
+      <a class="modos__tab" href="./">
+        <strong>Calcular o DAS — simples</strong>
+        <span>CNPJ, receita de 12 meses, faturamento e folha</span>
+      </a>
+      <a class="modos__tab" href="./#completa">
+        <strong>Calcular o DAS — completa</strong>
+        <span>Várias atividades, ST, monofásico, ISS retido</span>
+      </a>
+      <a class="modos__tab" href="comparar.html">
+        <strong>Comparar regimes</strong>
+        <span>Reforma Tributária, de 2027 a 2033</span>
+      </a>
+      <a class="modos__tab" href="mei.html" aria-current="page">
+        <strong>MEI ou empresa?</strong>
+        <span>Resposta simples: ainda vale ser MEI?</span>
+      </a>
+    </nav>
+  </div>
+
+  <main id="mei" class="container comparador mei">
+    <form id="form-mei" class="card" novalidate autocomplete="off">
+      <header class="card__head">
+        <span class="step">1</span>
+        <div>
+          <h2>Duas perguntas</h2>
+          <p class="card__sub">Se não souber algum detalhe, deixe como está.</p>
+        </div>
+      </header>
+
+      <fieldset class="field mei-q">
+        <legend class="label">O que você faz?</legend>
+        <div class="segmented">
+          <label><input type="radio" name="atividade" value="servico" checked> <span>Presto serviços</span></label>
+          <label><input type="radio" name="atividade" value="comercio"> <span>Vendo produtos</span></label>
+          <label><input type="radio" name="atividade" value="ambos"> <span>Os dois</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field mei-q" id="bloco-servico">
+        <legend class="label">Que tipo de serviço?</legend>
+        <div class="segmented">
+          <label><input type="radio" name="servico" value="III" checked> <span>Serviço comum</span></label>
+          <label><input type="radio" name="servico" value="FR"> <span>Técnico ou intelectual</span></label>
+        </div>
+        <p class="hint" id="servico-hint">Ex.: beleza, manutenção, reparos, limpeza, transporte, alimentação, fotografia.</p>
+      </fieldset>
+
+      <div class="grid-2">
+        <div class="field mei-q">
+          <label class="label" for="m-faturamento">Quanto você fatura?</label>
+          <input id="m-faturamento" class="input money input--grande" type="text" inputmode="decimal" placeholder="R$ 0,00" aria-describedby="m-faturamento-hint">
+          <div class="segmented segmented--mini">
+            <label><input type="radio" name="periodo" value="mes" checked> <span>por mês (média)</span></label>
+            <label><input type="radio" name="periodo" value="ano"> <span>por ano</span></label>
+          </div>
+          <p class="hint" id="m-faturamento-hint">Tudo o que entra das vendas ou serviços, antes de pagar despesas.</p>
+        </div>
+        <div class="field mei-q">
+          <label class="label" for="m-ano">Ano</label>
+          <select id="m-ano" class="input"></select>
+          <p class="hint" id="m-ano-hint"></p>
+        </div>
+      </div>
+
+      <details class="acc premissas">
+        <summary>Ajustar valores (opcional)</summary>
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="m-contador">Mensalidade do contador (como empresa)</label>
+            <input id="m-contador" class="input money" type="text" inputmode="decimal">
+            <p class="hint">Valor de referência: R$ 350,00 por mês. O MEI não é obrigado a ter contador.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="m-prolabore">Pró-labore (seu "salário" como empresa), por mês</label>
+            <input id="m-prolabore" class="input money" type="text" inputmode="decimal">
+            <p class="hint">Padrão: 1 salário mínimo. Sobre ele a empresa recolhe 11% de INSS.</p>
+          </div>
+          <div class="field">
+            <label class="label" for="m-empregados">Quantos empregados você tem?</label>
+            <input id="m-empregados" class="input money" type="text" inputmode="numeric" value="0">
+          </div>
+          <div class="field" id="bloco-part" hidden>
+            <label class="label" for="m-part">Quanto do faturamento vem de serviços? (%)</label>
+            <input id="m-part" class="input money" type="text" inputmode="decimal" value="50,00%">
+            <p class="hint">O resto é considerado venda de produtos.</p>
+          </div>
+        </div>
+      </details>
+
+      <div id="m-erros" class="notice notice--error" role="alert" hidden></div>
+      <div class="actions">
+        <button class="btn btn--primary btn--lg" type="submit">Ver a resposta</button>
+        <button id="m-limpar" class="btn btn--secondary" type="button">Limpar</button>
+      </div>
+    </form>
+
+    <section id="m-resultado" class="card card--result" aria-live="polite" hidden>
+      <header class="card__head">
+        <span class="step step--light">2</span>
+        <div>
+          <h2>A resposta</h2>
+          <p class="card__sub" id="m-resultado-sub"></p>
+        </div>
+      </header>
+      <div id="m-resultado-corpo"></div>
+    </section>
+  </main>
+
+  <section id="como-funciona" class="container info">
+    <h2>Como a conta é feita</h2>
+    <div class="info__grid">
+      <div class="info__item">
+        <h3>MEI</h3>
+        <p>Paga um valor fixo por mês (DAS-MEI): 5% do salário mínimo para o INSS, mais R$ 1 de ICMS (comércio) e/ou R$ 5 de ISS (serviços). Vale enquanto o faturamento do ano não passar do limite.</p>
+      </div>
+      <div class="info__item">
+        <h3>Microempresa (ME)</h3>
+        <p>No Simples Nacional o imposto é um percentual do faturamento, que começa em 4% (comércio) ou 6% (serviços). Somamos o INSS sobre o pró-labore e a mensalidade do contador.</p>
+      </div>
+      <div class="info__item">
+        <h3>Quando compensa mudar</h3>
+        <p>Ao sair do MEI o custo dá um salto. Mostramos a partir de qual faturamento a empresa deixa no seu bolso pelo menos o mesmo que o MEI deixava no limite.</p>
+      </div>
+      <div class="info__item">
+        <h3>Passou do limite?</h3>
+        <p>Até 20% acima: paga uma guia extra sobre o que passou e vira empresa em janeiro. Mais de 20%: a mudança vale desde janeiro do mesmo ano.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="avisos" class="container info">
+    <h2>Avisos importantes</h2>
+    <details class="acc" open>
+      <summary>Natureza ilustrativa</summary>
+      <p>Os resultados são estimativas para fins educativos, supondo faturamento estável ao longo do ano. Não são recomendação nem orientação contábil ou jurídica. A RC2 Contábil não se responsabiliza por decisões tomadas apenas com base nesta simulação.</p>
+    </details>
+    <details class="acc">
+      <summary>O que não está contemplado</summary>
+      <ul>
+        <li>Se a sua ocupação é permitida no MEI (confira a <a href="https://www.gov.br/empresas-e-negocios/pt-br/empreendedor/quero-ser-mei/atividades-permitidas" target="_blank" rel="noopener noreferrer">lista oficial</a>).</li>
+        <li>Custos com empregados (salário, FGTS e encargos), que existem nos dois casos.</li>
+        <li>Imposto de renda sobre o pró-labore acima da faixa de isenção e sobre a distribuição de lucros acima dos limites legais.</li>
+        <li>ICMS por substituição tributária, produtos monofásicos, ISS retido, benefícios estaduais e municipais, taxas e alvarás.</li>
+        <li>Multas e juros de quem passa do limite e não se desenquadra no prazo.</li>
+      </ul>
+    </details>
+    <details class="acc">
+      <summary>Privacidade (LGPD)</summary>
+      <p>Esta página não usa cookies, rastreadores ou formulários de cadastro, e não envia os valores digitados a nenhum servidor: todo o cálculo acontece no seu navegador. O servidor registra os acessos à página com o endereço IP anonimizado, sem cookies e sem dado que identifique o visitante.</p>
+    </details>
+    <details class="acc">
+      <summary>Base legal e atualização</summary>
+      <p>Lei Complementar nº 123/2006, arts. 18-A a 18-E (MEI), com a redação da LC nº 238/2026 (limites de R$ 81 mil em 2026, R$ 110 mil em 2027 e R$ 140 mil a partir de 2028, condicionados às leis orçamentárias); Anexos I, III, IV e V (Simples Nacional) e Fator R (art. 18, § 5º-J e § 5º-M); Resolução CGSN nº 140/2018. A partir de 2027, alíquotas do Simples na redação da LC nº 214/2025. Revisado em <span id="m-revisao"></span>.</p>
+    </details>
+  </section>
+
+  <section class="container cta">
+    <div class="cta__box">
+      <div>
+        <h2>Vai crescer? Planeje a mudança</h2>
+        <p>A RC2 Contábil cuida da passagem de MEI para microempresa sem surpresas, com os seus números reais.</p>
+      </div>
+      <div class="cta__actions">
+        <a id="m-cta-whats" class="btn btn--accent btn--lg" href="https://wa.me/5521973839229?text=Ol%C3%A1%2C%20usei%20a%20calculadora%20MEI%20ou%20empresa%20e%20gostaria%20de%20falar%20com%20um%20contador." target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+        <a class="btn btn--ghost-dark btn--lg" href="mailto:rc2contabil.rcn@gmail.com?subject=MEI%20ou%20microempresa">Enviar e-mail</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/img/logo-rc2.png" alt="" width="44" height="44">
+        <div>
+          <strong>RC2 Contábil</strong>
+          <p>Niterói / São Gonçalo — RJ<br><a href="https://wa.me/5521973839229" target="_blank" rel="noopener noreferrer">(21) 97383-9229</a> · <a href="mailto:rc2contabil.rcn@gmail.com">rc2contabil.rcn@gmail.com</a></p>
+        </div>
+      </div>
+      <p class="footer__legal">Simulação ilustrativa, sem valor fiscal. Não substitui a orientação de um profissional de contabilidade. © <span id="ano"></span> RC2 Contábil.</p>
+    </div>
+  </footer>
+</body>
+</html>

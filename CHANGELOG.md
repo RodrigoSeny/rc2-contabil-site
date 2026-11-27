@@ -5,6 +5,23 @@ e [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [1.4.0] - 2026-11-27
+
+### Adicionado
+- Página "Ainda vale a pena ser MEI?" (`/calculadora-simples/mei.html`), para quem não
+  tem conhecimento técnico: duas perguntas (o que faz e quanto fatura) e resposta
+  em linguagem simples, com o custo como MEI e como microempresa, a tabela "se o
+  faturamento crescer", o ponto de equilíbrio e a regra da tolerância de 20%.
+  Detalhamento dos cálculos e das regras recolhido em "Ver os cálculos".
+- Mensalidade do contador editável (padrão R$ 350,00), pró-labore, empregados e
+  parte de serviços (comércio e serviços).
+- Motor `mei.js` (funções puras, centavos inteiros), também usado pelo RC2 Gestão;
+  testes em `test/mei.test.js`.
+- Aba "MEI ou empresa?" na calculadora e no comparativo; botão no quadro do MEI.
+
+### Alterado
+- Scripts e CSS com `?v=1.4.0`.
+
 ## [1.3.0] - 2026-11-25
 
 ### Adicionado

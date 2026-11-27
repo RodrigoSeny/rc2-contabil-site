@@ -394,3 +394,31 @@ a.modos__tab { text-decoration: none; }
 /* Na página da calculadora, as duas abas ficam num grupo (tablist) e o comparativo é um link. */
 .modos__grupo { display: contents; }
 .modos__tab strong .tag { margin-left: 6px; vertical-align: middle; font-size: .7rem; }
+
+/* ---------- MEI ou empresa? (mei.html) ---------- */
+.modos--4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) { .modos--4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .modos--4 { grid-template-columns: 1fr; } }
+.mei .mei-q > .label, .mei .mei-q > legend.label { font-size: 1.02rem; color: var(--navy-900); }
+.mei .segmented span { padding: 11px 6px; font-size: .95rem; }
+.segmented--mini { margin-top: 8px; }
+.mei .segmented--mini span { padding: 6px; font-size: .84rem; }
+.input--grande { font-size: 1.25rem; font-weight: 600; }
+.veredito { font-size: 1rem; margin-bottom: 16px; }
+.veredito .notice__icon { width: 28px; height: 28px; }
+.veredito__titulo { display: block; font-size: 1.2rem; margin-bottom: 2px; }
+.veredito li { margin-top: 6px; }
+.kpis--3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 640px) { .kpis--3 { grid-template-columns: 1fr; } }
+.kpi__sub { color: var(--ink-3); font-size: .78rem; }
+.tabela-mei tr.atual td { background: var(--navy-50); font-weight: 700; }
+.tabela-mei td .tag { margin-left: 6px; vertical-align: middle; }
+.detalhes-tecnicos h4 { margin: 14px 0 4px; color: var(--navy-900); font-size: .98rem; }
+.detalhes-tecnicos ul { margin: 4px 0 0; padding-left: 18px; }
+.mei-link { margin-top: 4px; }
+@media print {
+  .mei > form { display: none !important; }
+  .tabela-mei td.melhor, .tabela-mei tr.atual td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+.tabela-mei th { white-space: normal; }
+@media (max-width: 480px) { .tabela-mei th, .tabela-mei td { padding: 8px 6px; } .tabela-mei td .tag { display: block; margin: 4px 0 0; width: max-content; margin-left: auto; } }

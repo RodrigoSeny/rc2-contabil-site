@@ -479,7 +479,8 @@
         h('div', { class: 'table-wrap' }, h('table', null, h('thead', null, h('tr', null, h('th', { text: 'Atividade' }), h('th', { class: 'num', text: 'DAS-MEI/mês' }))), tb)),
         regras,
         ajuste,
-        h('p', { text: 'A calculadora abaixo mostra quanto a empresa pagaria como ME/EPP no Simples Nacional, útil para comparar caso o limite do MEI seja ultrapassado.' })
+        h('p', { text: 'A calculadora abaixo mostra quanto a empresa pagaria como ME/EPP no Simples Nacional, útil para comparar caso o limite do MEI seja ultrapassado.' }),
+        h('p', { class: 'mei-link' }, h('a', { class: 'btn btn--secondary', href: 'mei.html', text: 'Ainda vale a pena ser MEI? Ver a resposta simples' }))
       ));
   }
 
